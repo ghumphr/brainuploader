@@ -5,7 +5,7 @@ BrainUploader implements a structured learning program to let you memorize large
 BrainUploader implements a streamlined and simplified adaptation of the [Leitner Cardfile System](https://mindedge.com/learning-science/the-leitner-system-how-does-it-work/) that is unconstrained by the limitations of physical flashcards.
 
 ## Installation
-Installing BrainUploader is easy. First, check out the repository. Next, execute the following commands:
+Installing BrainUploader is easy. First, clone out the repository. Next, execute the following commands:
 
 ```bash
 # First, check out the repository and set the working directory to the repository root
