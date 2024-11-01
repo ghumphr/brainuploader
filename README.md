@@ -15,11 +15,11 @@ exit
 ```
 
 ## Getting Started
-To run my awesome app simply,
+To launch BrainUploader locally, simply run
 ```bash
 python manage.py runserver
 ```
-See in-app menus for help with using specific features.
+You can start using BrainUploader at http://localhost:8000/, or can visit the administration interface at http://localhost:8000/admin/.
 
 # License
 
