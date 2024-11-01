@@ -15,7 +15,7 @@ exit
 ## Getting Started
 To launch BrainUploader locally, simply run
 ```bash
-python manage.py runserver
+docker run brainuploader python manage.py runserver
 ```
 You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/.
 
