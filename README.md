@@ -1,8 +1,6 @@
 # BrainUploader
 BrainUploader implements a structured learning program to let you memorize large amounts of information quickly.  Upload information to your brain!
 
-(note: this revision contains copy-paste code from the assignment description that must be edited; please disregard any obviously incorrect or apparently plagiarized text below until this notice is removed)
-
 ## Installation
 ```bash
 # First, check out the repository and set the working directory to the repository root
@@ -19,7 +17,7 @@ To launch BrainUploader locally, simply run
 ```bash
 python manage.py runserver
 ```
-You can start using BrainUploader at http://localhost:8000/, or can visit the administration interface at http://localhost:8000/admin/.
+You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/.
 
 # License
 
