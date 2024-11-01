@@ -24,7 +24,7 @@ docker run brainuploader python manage.py runserver
 ```
 You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/.
 
-## How Is BrainUploader Different than the Leightner Cardfile System?
+## How Is BrainUploader Different than the Leitner Cardfile System?
 To facilitate learning, BrainUploader tracks a few key statistics for the user on each flashcard between review sessions. In particular, BrainUploader tracks the number of times the user has gotten the flashcard right in a row and the last time the flashcard was reviewed. Once the user has gotten the flashcard right once, the user will not see the flashcard again until the next day. If the user has gotten the flashcard right twice, the user will not see the flashcard for two days. If the user has gotten the flashcard right three times, they won't see it for four days, four times eight days, ... following the equation $$\text{Days to  Next Review} = 2^{\text{Times Right}}$$. But if the user gets the flashcard wrong, the times-right-in-a-row counter will be reset, so the card will be scheduled for review the very next day.
 
 In this way, the user will regularly review information that is not yet memorized, while flashcards containing information that is already known will be reviewed infrequently.
