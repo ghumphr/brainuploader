@@ -5,16 +5,19 @@ BrainUploader implements a structured learning program to let you memorize large
 
 ## Installation
 ```bash
-docker-build .
-docker-compose run django bash
+# First, check out the repository and set the working directory to the repository root
+more LICENSE
+docker build -t brainuploader .
+docker run -it brainuploader bash
 python manage.py migrate
 python manage.py createsuperuser
+exit
 ```
 
 ## Getting Started
 To run my awesome app simply,
 ```bash
-docker-compose up
+python manage.py runserver
 ```
 See in-app menus for help with using specific features.
 
