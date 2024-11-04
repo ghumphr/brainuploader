@@ -7,7 +7,7 @@ BrainUploader implements a streamlined and simplified adaptation of the [Leitner
 
 
 ## Installation
-Installing BrainUploader is easy. First, clone out the repository. Next, execute the following commands:
+Installing BrainUploader is easy. First, clone the repository. Next, execute the following commands:
 
 ```bash
 # First, check out the repository and set the working directory to the repository root
