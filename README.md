@@ -2,9 +2,7 @@
 BrainUploader powers a structured learning program to let you memorize large amounts of information quickly.  Upload information to your brain!
 
 ## Executive Summary
-BrainUploader implements a streamlined and simplified adaptation of the [Leitner Cardfile System](https://mindedge.com/learning-science/the-leitner-system-how-does-it-work/) that is unconstrained by the limitations of physical flashcards.
-
-
+BrainUploader implements a streamlined and simplified adaptation of the [Leitner Cardfile System](https://mindedge.com/learning-science/the-leitner-system-how-does-it-work/), a study method based on scheduling flashcards for optimal learning. BrainUploader builds upon the Leitner System with commonsense improvements that take advantage of modern technology to remove the constraints inherent in physical flashcards.
 
 ## Installation
 Installing BrainUploader is easy. First, clone the repository. Next, execute the following commands:
@@ -34,7 +32,7 @@ BrainUploader uses flashcards, scheduling them for review based on a few key sta
 
 In later review sessions, if the user has gotten the flashcard right twice, the user will not see the flashcard for two days. If the user has gotten the flashcard right three times, they won't see it for four days, four times eight days, ... following the equation $$\text{Days to  Next Review} = 2^{\text{Times Right in a Row - 1}}$$. But if the user gets the flashcard wrong, the times-right-in-a-row counter will be reset to 0, so the card will be scheduled for review immediately, and when it is answered correctly, it will be scheduled again on the very next day.
 
-In this way, the user will regularly review information that is not yet memorized, while flashcards containing information that is already known will be reviewed infrequently.
+In this way, the user will regularly review information that is not yet memorized, while flashcards containing information that is already known will be reviewed with diminishing frequency.
 
 # License
 
