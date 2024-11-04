@@ -79,7 +79,7 @@ As an identity thief, I want to steal personal information from users on the web
 ### Mitigation Criteria
 - All passwords should be hashed
 - Personal information like email addresses should not be displayed on user profiles
-- System should be hardened against attacks
+- System should be hardened against attacks by automated testing
 
 ## Resource Hog
 As a resource hog, I want to use large quantities of computing resources with no reasonable purpose.
