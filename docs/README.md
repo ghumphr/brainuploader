@@ -29,5 +29,8 @@ As a mistaken user, I want to put incorrect answers on shared flashcards so that
 ## Identity Thief
 As an identity thief, I want to steal personal information from other users on the website to use for fraudulent impersonation.
 
+## Resource Hog
+As a resource hog, I want to use large quantities of computing resources with no reasonable purpose.
+
 
 
