@@ -1,0 +1,30 @@
+<html>
+<head><title>BrainUploader</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <div class="flashcard-container">
+        <div class="flashcard question-side" style="display:none;">
+            <h1>Q:</h1>
+            <p>What is the capital of France?</p>
+        </div>
+        <div class="flashcard answer-side" style="display:none;">
+            <h1>A:</h1>
+            <p>Paris</p>
+        </div>
+        <button class="button flip-button">Flip</button>
+        <button class="button right-button">Right</button>
+        <button class="button wrong-button">Wrong</button>
+    </div>
+    <script>
+$(document).ready(function() {
+    $(".question-side").show();
+    $(".flip-button").click(function() {
+        $(".question-side, .answer-side").toggle();
+    });
+});
+    </script>
+</body>
+</html>
+
