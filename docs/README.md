@@ -20,6 +20,7 @@ As a student, I want to review information that I don't know yet so that I can l
 - User needs to be able to review cards in stacks
 - User needs search functionality
 - User needs review mode that uses cards that meet query critera and disregards scheduling
+- Scheduling algorithm must be implemented
 
 ## Instructor
 As an instructor, I want to share specific flashcard decks with specific students or the public so they can learn the material.
