@@ -73,7 +73,7 @@ As a mistaken user, I want to put incorrect answers on shared flashcards so that
 
 
 ## Identity Thief
-As an identity thief, I want to steal personal information from other users on the website to use for fraudulent impersonation.
+As an identity thief, I want to steal personal information from users on the website to use for fraudulent impersonation.
 
 ### Mitigation Criteria
 - All passwords should be hashed
