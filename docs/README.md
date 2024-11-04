@@ -26,7 +26,7 @@ As a disruptive user, I want to put obscene or harmful content into shared flash
 ## Mistaken/Incorrect User
 As a mistaken user, I want to put incorrect answers on shared flashcards so that misinformation will spread.
 
-## Identity Theif
+## Identity Thief
 As an identity thief, I want to steal personal information from other users on the website to use for fraudulent impersonation.
 
 
