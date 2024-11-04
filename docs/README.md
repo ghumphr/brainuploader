@@ -7,7 +7,7 @@ As a content creator, I want to generate new flashcard decks, so that I can orga
 As a student, I want to review information that I don't know yet so that I can learn it quickly.
 
 ## Instructor
-As an instructor, I want to share specific decks with specific students so they can learn the material.
+As an instructor, I want to share specific flashcard decks with specific students or the public so they can learn the material.
 
 ## AI Researcher
 As an AI researcher, I want to extract all question/answer content in a simple and structured form so that I can inform language models.
