@@ -26,9 +26,12 @@
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #beef00;
+    background-color: #bebe00;
     color: white;
     cursor: pointer;   
     white-space: normal;
+}
 
+body {
+  background-image: url("../images/braintile.png");
 }
