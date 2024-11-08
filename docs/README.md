@@ -144,7 +144,9 @@ As a resource hog, I want to use large quantities of computing resources so I ca
 
 Consider adding captcha to login screen
 
-Note: forgot password screens are omitted here but will follow a similar design
+Note: The forgot password screen will be left as a simple note saying to email the admin
+for now; they can follow a very straightforward and similar design once we
+add email connectivity, 2fa, SAML integration with popular platforms, etc.
 
 
 ## New user screen
