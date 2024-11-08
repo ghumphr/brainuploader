@@ -17,7 +17,7 @@ As a student, I want to review information I don't know so I can learn it quickl
 ### Acceptance Criteria
 - User needs to be able to collect decks into stacks
 - User needs to be able to review cards in stacks
-- User needs to be able to search search flashcards
+- User needs to be able to search flashcards
 - User needs to be able to schedule flashcards automatically
 
 ## Instructor
