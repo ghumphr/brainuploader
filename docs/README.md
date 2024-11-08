@@ -310,7 +310,15 @@ add email connectivity, 2fa, SAML integration with popular platforms, etc.
 
 ## Context
 
-![image](images/Context.drawio.png)
+![image](images/C4-Context.drawio.png)
+
+## Containers - BrainUploader
+
+![image](images/C4-Container.drawio.png)
+
+## Components - Flashcard Viewer
+
+![image](images/C4-Component.drawio.png)
 
 
 
