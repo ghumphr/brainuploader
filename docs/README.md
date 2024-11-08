@@ -18,7 +18,7 @@ As a student, I want to review information that I don't know yet so that I can l
 - User needs to be able to collect decks into stacks
 - User needs to be able to review cards in stacks
 - User needs search functionality
-- Scheduling algorithm must be implemented
+- User needs automated review scheduling
 
 ## Instructor
 As an instructor, I want to share specific flashcard decks with specific students or the public so they can learn the material.
