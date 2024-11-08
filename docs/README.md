@@ -98,7 +98,7 @@ As an identity thief, I want to steal personal information from the website so I
 - System should be hardened against attacks by automated testing
 
 ## Resource Hog
-As a resource hog, I want to use large quantities of computing resources so I can take unreasonable actions.
+As a resource hog, I want to consume large quantities of computing resources so I can waste them.
 
 ### Mitigation Criteria
 - One account per email address
