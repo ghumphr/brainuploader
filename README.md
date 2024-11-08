@@ -24,8 +24,8 @@ docker run brainuploader python manage.py runserver
 ```
 You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/.
 
-## How Is BrainUploader Different than the Leitner Cardfile System?
-The Leitner Cardfile System specifies that a series of boxes are to be used to hold flashcards and that flashcards are to be moved between boxes depending on whether they are answered correctly. One box is to be reviewed every day, one every other day, one every five days, and so on in increasing intervals. BrainUploader follows similar philosophy but doesn't use boxes. Instead, the statistics are tracked (virtually) on the cards themselves.
+## How Is BrainUploader Different Than the Leitner Cardfile System?
+The Leitner Cardfile System specifies that a series of boxes are to be used to hold flashcards. Flashcards are to be moved between boxes depending on whether they are answered correctly. One box is to be reviewed every day, one every other day, one every five days, and so on in increasing intervals. BrainUploader follows similar philosophy but doesn't use boxes. Instead, the statistics are tracked (virtually) on the cards themselves.
 
 ## How BrainUploader Works
 BrainUploader uses flashcards, scheduling them for review based on a few key statistics tracked on each flashcard for each user. In particular, BrainUploader tracks the number of times the user has gotten the flashcard right in a row and the last time the flashcard was reviewed. Once the user has gotten the flashcard right once, the user will not see the flashcard again until the next day.
