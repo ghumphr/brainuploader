@@ -10,7 +10,6 @@ As a content creator, I want to generate new flashcard decks, so that I can orga
 - User needs to be able to add flashcards to deck
 - User needs to be able to delete flashcards from deck
 - User needs to be able to edit flashcards in own decks
-- User needs to be able to delete flashcard decks
 
 ## Student
 As a student, I want to review information that I don't know yet so that I can learn it quickly.
@@ -19,7 +18,6 @@ As a student, I want to review information that I don't know yet so that I can l
 - User needs to be able to collect decks into stacks
 - User needs to be able to review cards in stacks
 - User needs search functionality
-- User needs review mode that uses cards that meet query critera and disregards scheduling
 - Scheduling algorithm must be implemented
 
 ## Instructor
