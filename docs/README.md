@@ -43,6 +43,25 @@ As a critic, I want to review content so that other users can see what I think.
 - User needs to be able to flag cards as incorrect
 - User needs to be able to flag cards as possibly harmful 
 
+## Critic
+As an admin, I want to perform administrative tasks so I can troubleshoot issues.
+
+### Acceptance Criteria
+
+- Admin needs to be able to review notifications
+- Admin needs to be able to create/delete/ban users
+- Admin needs to be able to change passwords
+- Admin needs to be able to review flagged cards
+- Admin needs to be able to delete cards
+
+
+### Acceptance Criteria
+
+- User needs to be able to leave reviews on flashcards
+- User needs to be able to leave reviews on decks
+- User needs to be able to flag cards as incorrect
+- User needs to be able to flag cards as possibly harmful 
+
 # Misuser Stories
 
 ## Competitor
