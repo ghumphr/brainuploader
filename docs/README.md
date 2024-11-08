@@ -17,8 +17,8 @@ As a student, I want to review information that I don't know yet so that I can l
 ### Acceptance Criteria
 - User needs to be able to collect decks into stacks
 - User needs to be able to review cards in stacks
-- User needs search functionality
-- User needs automated review scheduling
+- User needs to be able to search search flashcards
+- User needs to be able to schedule flashcards automatically
 
 ## Instructor
 As an instructor, I want to share specific flashcard decks with specific students or the public so they can learn the material.
@@ -31,7 +31,7 @@ As an instructor, I want to share specific flashcard decks with specific student
 As an AI researcher, I want to extract all question/answer content in a simple and structured form so that I can inform language models.
 
 ### Acceptance Criteria
-- User needs to be able to extract all card data programatically with a paged API call
+- Privileged user needs to be able to extract all card data programatically with a paged API call
 
 ## Critic
 As a critic, I want others to see what I think about flashcards others have created.
