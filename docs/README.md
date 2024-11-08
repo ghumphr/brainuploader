@@ -12,7 +12,7 @@ As a content creator, I want to generate new flashcard decks, so that I can orga
 - User needs to be able to edit flashcards in own decks
 
 ## Student
-As a student, I want to review information that I don't know yet so that I can learn it quickly.
+As a student, I want to review information I don't know so I can learn it quickly.
 
 ### Acceptance Criteria
 - User needs to be able to collect decks into stacks
@@ -21,20 +21,20 @@ As a student, I want to review information that I don't know yet so that I can l
 - User needs to be able to schedule flashcards automatically
 
 ## Instructor
-As an instructor, I want to share specific flashcard decks with specific students or the public so they can learn the material.
+As an instructor, I want to share flashcard decks with other users so they can learn the material.
 
 ### Acceptance Criteria
 - User needs to be able to share decks with public
 - User needs to be able to share decks with specific users
 
 ## AI Researcher
-As an AI researcher, I want to extract all question/answer content in a simple and structured form so that I can inform language models.
+As an AI researcher, I want to extract all question/answer content in a structured form so I can inform language models.
 
 ### Acceptance Criteria
 - Privileged user needs to be able to extract all card data programatically with a paged API call
 
 ## Critic
-As a critic, I want others to see what I think about flashcards others have created.
+As a critic, I want to review content so that other users can see what I think.
 
 ### Acceptance Criteria
 
@@ -55,7 +55,7 @@ As a competitor, I want to steal all of the flashcards so I can use them in my o
 - Administrator must be notified when usage limits are exceeded
 
 ## Disruptive User
-As a disruptive user, I want to put obscene or harmful content into shared flashcards so that other users will be upset.
+As a disruptive user, I want to put harmful content into shared flashcards so that other users will be upset.
 
 ### Mitigation Criteria
 - Administrator must have ability to warn/ban users
@@ -63,7 +63,7 @@ As a disruptive user, I want to put obscene or harmful content into shared flash
 - Automated review should be performed to determine if content should be flagged offensive
 
 ## Mistaken/Incorrect User
-As a mistaken user, I want to put incorrect answers on shared flashcards so that misinformation will spread.
+As a mistaken user, I want to put incorrect answers on shared flashcards so I can spread misinformation.
 
 ### Mitigation Criteria
 - Users should be notified if cards in decks or with identical content are flagged incorrect
@@ -72,7 +72,7 @@ As a mistaken user, I want to put incorrect answers on shared flashcards so that
 
 
 ## Identity Thief
-As an identity thief, I want to steal personal information from users on the website to use for fraudulent impersonation.
+As an identity thief, I want to steal personal information from the website so I can commit fraud.
 
 ### Mitigation Criteria
 - All passwords should be hashed
@@ -80,7 +80,7 @@ As an identity thief, I want to steal personal information from users on the web
 - System should be hardened against attacks by automated testing
 
 ## Resource Hog
-As a resource hog, I want to use large quantities of computing resources with no reasonable purpose.
+As a resource hog, I want to use large quantities of computing resources so I can do unreasonable things.
 
 ### Mitigation Criteria
 - One account per email address
