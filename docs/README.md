@@ -88,7 +88,7 @@ As a resource hog, I want to use large quantities of computing resources so I ca
 - Limits on number of cards that can be shared per day
 
 
-
+# Mockups
 
 
 ## Splash screen
