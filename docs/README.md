@@ -43,7 +43,7 @@ As a critic, I want to review content so that other users can see what I think.
 - User needs to be able to flag cards as incorrect
 - User needs to be able to flag cards as possibly harmful 
 
-## Critic
+## Admin
 As an admin, I want to perform administrative tasks so I can troubleshoot issues.
 
 ### Acceptance Criteria
