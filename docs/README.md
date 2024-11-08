@@ -70,7 +70,6 @@ As a mistaken user, I want to put incorrect answers on shared flashcards so I ca
 - Scorecard for decks should be visible to all users who can see the deck
 - Public scorecard should be kept for users
 
-
 ## Identity Thief
 As an identity thief, I want to steal personal information from the website so I can commit fraud.
 
