@@ -306,7 +306,11 @@ add email connectivity, 2fa, SAML integration with popular platforms, etc.
     |                                                                              |
     +------------------------------------------------------------------------------+
 
+# System Diagrams
 
+## Context
+
+![image](images/Context.drawio.png)
 
 
 
