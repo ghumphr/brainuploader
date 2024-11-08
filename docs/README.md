@@ -275,7 +275,7 @@ Note: forgot password screens are omitted here but will follow a similar design
     |     Merge stacks: v_____ and v_____ to v_______                              |
     |     Search flashcards: ________ |SEARCH|                                     |
     |     Share deck: v________ with v________  |SHARE|                            |
-    |     Set current stack:                                                       |
+    |     Set current stack: v________                                             |
     |                                                                              |
     |                                                                              |
     |                                                                              |
