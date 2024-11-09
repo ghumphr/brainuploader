@@ -1,5 +1,4 @@
 from rest_framework import permissions
-from graphql import GraphQLError
 
 class IsOwner(permissions.BasePermission):
     """

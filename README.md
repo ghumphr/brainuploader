@@ -10,19 +10,24 @@ Installing BrainUploader is easy. First, clone the repository. Next, execute the
 ```bash
 # First, check out the repository and set the working directory to the repository root
 more LICENSE
-docker build -t brainuploader .
-docker run -it brainuploader bash
-python manage.py migrate
-python manage.py createsuperuser
-exit
+docker compose up -d
+docker compose exec brainuploader python manage.py makemigrations brainuploader
+docker compose exec brainuploader python manage.py migrate
+docker compose exec brainuploader python manage.py createsuperuser
+docker compose exec brainuploader python generate_sample_flashcards.py
+docker compose down
 ```
 
+These commands are contained in the INSTALL.sh script.
+
 ## Getting Started
-To launch BrainUploader locally, simply run
+To launch BrainUploader locally (after installation), simply run
 ```bash
-docker run brainuploader python manage.py runserver
+docker compose up
 ```
-You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/.
+from within the repository.
+
+You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/. Please be aware that this is only a prototype. Some things are broken, some things are not working, and some things are deliberately disabled. What is working? If you like, you can edit flashcards from the admin interface.
 
 ## How Is BrainUploader Different Than the Leitner Cardfile System?
 The Leitner Cardfile System specifies that a series of boxes are to be used to hold flashcards. Flashcards are to be moved between boxes depending on whether they are answered correctly. One box is to be reviewed every day, one every other day, one every five days, and so on in increasing intervals. BrainUploader follows similar philosophy but doesn't use boxes. Instead, the statistics are tracked (virtually) on the cards themselves.
