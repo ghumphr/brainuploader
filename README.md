@@ -27,7 +27,7 @@ docker compose up
 ```
 from within the repository.
 
-You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/. Please be aware that this is only a prototype. Some things are broken, some things are not working, and some things are deliberately disabled. What is working? If you like, you can edit flashcards from the admin interface.
+You can start using BrainUploader at http://localhost:8000/, or you can visit the administration interface at http://localhost:8000/admin/. Please be aware that this is only a prototype; some things are broken, some things are not working, and some things are deliberately disabled. What is working? A card review interface is in place, along with some database connectivity. 
 
 ## How Is BrainUploader Different Than the Leitner Cardfile System?
 The Leitner Cardfile System specifies that a series of boxes are to be used to hold flashcards. Flashcards are to be moved between boxes depending on whether they are answered correctly. One box is to be reviewed every day, one every other day, one every five days, and so on in increasing intervals. BrainUploader follows similar philosophy but doesn't use boxes. Instead, the statistics are tracked (virtually) on the cards themselves.
