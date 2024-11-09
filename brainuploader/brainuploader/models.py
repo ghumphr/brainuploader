@@ -13,7 +13,7 @@ class Deck(models.Model):
 
 class Flashcard(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
-    last_right = models.DateTimeField()
+    next_review = models.DateTimeField()
     times_right_in_a_row = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(30)])
     front = models.CharField(max_length=16382)
     back = models.CharField(max_length=16382)

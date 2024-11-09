@@ -3,12 +3,12 @@ from .models import Flashcard
 from .models import Deck
 
 class FlashcardAdmin(admin.ModelAdmin):
-    list_display = ('deck', 'last_right', 'times_right_in_a_row', 'front', 'back')
-    search_fields = ('deck', 'last_right', 'times_right_in_a_row', 'front', 'back')
-    list_filter = ('deck', 'last_right', 'times_right_in_a_row', 'front', 'back')
-    list_filter = ('deck', 'last_right', 'times_right_in_a_row', 'front', 'back')
-    list_display_links = ('deck', 'last_right', 'times_right_in_a_row', 'front', 'back')
-    fields = ('deck', 'last_right', 'times_right_in_a_row', 'front', 'back')
+    list_display = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
+    search_fields = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
+    list_filter = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
+    list_filter = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
+    list_display_links = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
+    fields = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
     
 admin.site.register(Flashcard, FlashcardAdmin)
 
