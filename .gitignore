@@ -1,0 +1,4 @@
+api-server/app/db.sqlite3
+api-server/app/brainuploader/__pycache__/
+api-server/app/brainuploader/migrations/__pycache__/
+frontend/app/node_modules/
