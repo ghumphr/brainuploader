@@ -12,7 +12,7 @@ services:
     ports:
       - 3000:3000
     command:
-      npm start
+      npx vite --port 3000 --host
     volumes:
       - ./frontend/app:/app
       
