@@ -1,0 +1,130 @@
+<html>
+<head><title>BrainUploader</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <!-- TODO: this should use a local copy or perhaps a trusted CDN with hash -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <div class="flashcard-container">
+        <div class="flashcard question-side" style="display:none;">
+            <h1>Q:</h1>
+            <div class="question">
+                <p>What is the capital of France?</p>
+            </div>
+        </div>
+        <div class="flashcard answer-side" style="display:none;">
+            <h1>A:</h1>
+            <div class="answer">
+                <p>Paris</p>
+            </div>
+        </div>
+<table>
+<tr> <td></td> <td> <button class="button flip-button">Flip</button> </td> <td></td> </tr>
+<tr> <td>
+<button class="button wrong-button">Wrong</button>
+</td> <td></td> <td>
+<button class="button right-button">Right</button>
+</td> </tr>
+<tr> <td></td> <td> <button class="button skip-button">Skip</button> </td> <td></td> </tr>
+</table>
+<!--        <button class="button edit-button">Edit</button>
+        <button class="button new-button">New</button> -->
+    </div>
+    <script>
+
+var current_stack = [];
+
+function show_question()
+{
+//    alert("show_question() " + current_stack.length);
+    if(current_stack.length > 0)
+    {
+//        alert(current_stack[0].front);
+        $(".question").html(current_stack[0].front);
+        $(".answer-side").hide();
+        $(".question-side").show();
+        $(".answer").html(current_stack[0].back);
+    }
+    else
+    {
+        $(".question").html("");
+        $(".answer").html("");
+        $(".answer-side").hide();
+        $(".question-side").show();
+        alert("There are no flashcards left.");
+    }
+}
+
+function show_answer()
+{
+    if(current_stack.length > 0)
+    {
+//        alert(current_stack[0].back);
+        $(".answer").html(current_stack[0].back);
+        $(".question-side").hide();
+        $(".question").html(current_stack[0].back);
+    }
+    else
+    {
+        $(".answer").html("");
+        $(".question-side").hide();
+        $(".answer-side").show();
+        $(".question").html("");
+        alert("There are no flashcards left.");
+    }
+}
+
+function process_flashcards(data, textStatus, jqXHR)
+{
+//    alert("process_flashcards()");
+    current_stack = data;
+    show_question();
+}
+
+
+
+$(document).ready(function() {
+    $(".flip-button").click(function() {
+        $(".question-side, .answer-side").toggle();
+    });
+
+    $(".skip-button").click(function() {
+        if(current_stack.length > 0)
+        {
+            a = current_stack.shift();
+            current_stack.push(a);
+        }
+        show_question();
+    });
+
+    $(".wrong-button").click(function() {
+        if(current_stack.length > 0)
+        {
+            a = current_stack.shift();
+            current_stack.push(a);
+        }
+        show_question();
+    });
+
+    $(".right-button").click(function() {
+        if(current_stack.length > 0)
+        {
+            a = current_stack.shift();
+        }
+        show_question();
+    });
+
+    $.ajax({
+        dataType: "json",
+        error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
+        timeout: 2000,
+        type: "GET",
+        url: "../rest/flashcards/",
+        success: process_flashcards
+    });
+    
+});
+    </script>
+</body>
+</html>
+

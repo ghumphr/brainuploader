@@ -1,0 +1,37 @@
+.flashcard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flashcard {
+    width: 620px;
+    height: 460px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    transition: transform 0.5s ease-in-out;
+}
+
+.question-side {
+}
+
+.answer-side {
+}
+
+.button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #bebe00;
+    color: white;
+    cursor: pointer;   
+    white-space: normal;
+}
+
+body {
+  background-image: url("../images/braintile.png");
+}
