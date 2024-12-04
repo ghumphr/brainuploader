@@ -21,17 +21,7 @@ class FlashcardCreateAPIView(generics.CreateAPIView):
     serializer_class = FlashcardSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-class FlashcardReadAPIView(generics.RetrieveAPIView):
-    queryset = Flashcard.objects.all()
-    serializer_class = FlashcardSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-class FlashcardUpdateAPIView(generics.UpdateAPIView):
-    queryset = Flashcard.objects.all()
-    serializer_class = FlashcardSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-class FlashcardDeleteAPIView(generics.DestroyAPIView):
+class FlashcardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Flashcard.objects.all()
     serializer_class = FlashcardSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
@@ -46,17 +36,7 @@ class DeckCreateAPIView(generics.CreateAPIView):
     serializer_class = DeckSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-class DeckReadAPIView(generics.RetrieveAPIView):
-    queryset = Deck.objects.all()
-    serializer_class = DeckSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-class DeckUpdateAPIView(generics.UpdateAPIView):
-    queryset = Deck.objects.all()
-    serializer_class = DeckSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
-
-class DeckDeleteAPIView(generics.DestroyAPIView):
+class DeckDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
@@ -98,12 +78,11 @@ def rest_create_flashcard(request, deck_id):
     except Deck.DoesNotExist:
         return Response({'error': 'Deck not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-### Flashcard Read
-
+### Flashcard Read/Update/Delete
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 @renderer_classes([renderers.JSONRenderer])
-def rest_read_flashcard(request, flashcard_id):
+def flashcard_detail_view(request, flashcard_id):
     try:
         flashcard = Flashcard.objects.get(pk=flashcard_id)
         # FIXME: we should possibly not distinguish between "not found" and "no permission" in production
@@ -114,9 +93,6 @@ def rest_read_flashcard(request, flashcard_id):
     except Flashcard.DoesNotExist:
         return Response({'error': 'Flashcard not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-### Flashcard Update
-
-### Flashcard Delete
 
 ### Flashcard Search
 @api_view(['GET'])
