@@ -12,7 +12,14 @@ from rest_framework.decorators import api_view, permission_classes, renderer_cla
 from .models import Flashcard
 from .serializers import FlashcardSerializer
 from .serializers import DeckSerializer
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "registration/signup.html"
 
 # see for more details on generics: https://www.django-rest-framework.org/api-guide/generic-views/
 
