@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from brainuploader.views import FlashcardDetailAPIView, FlashcardQueryAPIView
-from brainuploader.views import DeckDetailAPIView, DeckQueryAPIView
+from brainuploader.views import FlashcardCreateAPIView, FlashcardReadAPIView, FlashcardUpdateAPIView, FlashcardDeleteAPIView, FlashcardQueryAPIView
+from brainuploader.views import DeckCreateAPIView, DeckReadAPIView, DeckUpdateAPIView, DeckDeleteAPIView, DeckQueryAPIView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -33,7 +33,7 @@ urlpatterns = [
     path('rest/flashcard/update/<int:pk>/', FlashcardUpdateAPIView.as_view(), name='rest_update_flashcard'),
     path('rest/flashcard/delete/<int:pk>/', FlashcardDeleteAPIView.as_view(), name='rest_delete_flashcard'),
     path('rest/decks/', DeckQueryAPIView.as_view(), name='rest_query_decks'),
-    path('rest/deck/<int:pk>/', DeckDetailAPIView.as_view(), name='rest_get_deck'),
+    path('rest/deck/<int:pk>/', DeckReadAPIView.as_view(), name='rest_read_deck'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

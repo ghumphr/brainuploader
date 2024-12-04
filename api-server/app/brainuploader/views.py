@@ -14,14 +14,26 @@ from .serializers import FlashcardSerializer
 from .serializers import DeckSerializer
 
 
+# see for more details on generics: https://www.django-rest-framework.org/api-guide/generic-views/
+
+class FlashcardCreateAPIView(generics.CreateAPIView):
+    queryset = Flashcard.objects.all()
+    serializer_class = FlashcardSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
 class FlashcardReadAPIView(generics.RetrieveAPIView):
     queryset = Flashcard.objects.all()
     serializer_class = FlashcardSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-class DeckReadAPIView(generics.RetrieveAPIView):
-    queryset = Deck.objects.all()
-    serializer_class = DeckSerializer
+class FlashcardUpdateAPIView(generics.UpdateAPIView):
+    queryset = Flashcard.objects.all()
+    serializer_class = FlashcardSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+class FlashcardDeleteAPIView(generics.DestroyAPIView):
+    queryset = Flashcard.objects.all()
+    serializer_class = FlashcardSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 class FlashcardQueryAPIView(generics.ListAPIView):
@@ -29,10 +41,33 @@ class FlashcardQueryAPIView(generics.ListAPIView):
     serializer_class = FlashcardSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
+class DeckCreateAPIView(generics.CreateAPIView):
+    queryset = Deck.objects.all()
+    serializer_class = DeckSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+class DeckReadAPIView(generics.RetrieveAPIView):
+    queryset = Deck.objects.all()
+    serializer_class = DeckSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+class DeckUpdateAPIView(generics.UpdateAPIView):
+    queryset = Deck.objects.all()
+    serializer_class = DeckSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+class DeckDeleteAPIView(generics.DestroyAPIView):
+    queryset = Deck.objects.all()
+    serializer_class = DeckSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
 class DeckQueryAPIView(generics.ListAPIView):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+
+
 
 # There are two major components to the API:  Search and CRUD
 # Decks have metadata objects associated with them, supporting Read and Update
