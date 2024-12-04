@@ -28,7 +28,10 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest/flashcards/', FlashcardQueryAPIView.as_view(), name='rest_query_flashcards'),
-    path('rest/flashcard/<int:pk>/', FlashcardDetailAPIView.as_view(), name='rest_get_flashcard'),
+    path('rest/flashcard/create/?deck=<int:pk>', FlashcardCreateAPIView.as_view(), name='rest_create_flashcard'),
+    path('rest/flashcard/read/<int:pk>/', FlashcardReadAPIView.as_view(), name='rest_read_flashcard'),
+    path('rest/flashcard/update/<int:pk>/', FlashcardUpdateAPIView.as_view(), name='rest_update_flashcard'),
+    path('rest/flashcard/delete/<int:pk>/', FlashcardDeleteAPIView.as_view(), name='rest_delete_flashcard'),
     path('rest/decks/', DeckQueryAPIView.as_view(), name='rest_query_decks'),
     path('rest/deck/<int:pk>/', DeckDetailAPIView.as_view(), name='rest_get_deck'),
     path('accounts/', include('django.contrib.auth.urls')),

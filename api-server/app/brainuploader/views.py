@@ -17,74 +17,113 @@ from .serializers import DeckSerializer
 class FlashcardDetailAPIView(generics.RetrieveAPIView):
     queryset = Flashcard.objects.all()
     serializer_class = FlashcardSerializer
-# TODO: removed for prototyping purposes only
-#    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 class DeckDetailAPIView(generics.RetrieveAPIView):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer
-# TODO: removed for prototyping purposes only
-#    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 class FlashcardQueryAPIView(generics.ListAPIView):
     queryset = Flashcard.objects.all()
     serializer_class = FlashcardSerializer
-# TODO: removed for prototyping purposes only
-#    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 class DeckQueryAPIView(generics.ListAPIView):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer
-# TODO: removed for prototyping purposes only
-#    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+# There are two major components to the API:  Search and CRUD
+# Decks have metadata objects associated with them, supporting Read and Update
+
+
+## Flashcard CRUD
+
+### Flashcard Create
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+@renderer_classes([renderers.JSONRenderer])
+def rest_create_flashcard(request, deck_id):
+    try:
+        deck = Deck.objects.get(pk=deck_id)
+        # FIXME: we should possibly not distinguish between "not found" and "no permission" in production
+        if(deck.owner != request.user):
+            return Response({'error': 'You do not have permission to create cards in this deck.'}, status=status.HTTP_403_FORBIDDEN)
+        flashcard = Flashcard(
+            deck=deck,
+            next_review=timezone.now(),
+            times_right_in_a_row=0,
+            front = "",
+            back = ""
+        )
+        flashcard.save()
+        serializer = FlashcardSerializer(flashcard)
+        return Response(serializer.data)
+    except Deck.DoesNotExist:
+        return Response({'error': 'Deck not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+### Flashcard Read
 
 @api_view(['GET'])
-#@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.IsAuthenticated])
 @renderer_classes([renderers.JSONRenderer])
 def rest_get_flashcard(request, flashcard_id):
     try:
         flashcard = Flashcard.objects.get(pk=flashcard_id)
-        # Note: we should possibly not distinguish between "not found" and "no permission"
-# TODO: for the prototype, we are disabling authentication
-#        if(flashcard.owner != request.user):
-#            return Response({'error': 'You do not have permission to view this flashcard.'}, status=status.HTTP_403_FORBIDDEN)
+        # FIXME: we should possibly not distinguish between "not found" and "no permission" in production
+        if(flashcard.owner != request.user):
+            return Response({'error': 'You do not have permission to view this flashcard.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = FlashcardSerializer(flashcard)
         return Response(serializer.data)
     except Flashcard.DoesNotExist:
         return Response({'error': 'Flashcard not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+### Flashcard Update
 
+### Flashcard Delete
+
+### Flashcard Search
 @api_view(['GET'])
-#@permission_classes([permissions.IsAuthenticated])
-@renderer_classes([renderers.JSONRenderer])
-def rest_get_deck(request, deck_id):
-    try:
-        deck = Deck.objects.get(pk=deck_id)
-        # Note: we should possibly not distinguish between "not found" and "no permission"
-# TODO: for the prototype, we are disabling authentication
-#        if(deck.owner != request.user):
-#            return Response({'error': 'You do not have permission to view this deck.'}, status=status.HTTP_403_FORBIDDEN)
-        serializer = DeckSerializer(deck)
-        return Response(deck.data)
-    except Deck.DoesNotExist:
-        return Response({'error': 'Deck not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-
-@api_view(['GET'])
-#@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.IsAuthenticated])
 @renderer_classes([renderers.JSONRenderer])
 def rest_query_flashcards(request):
     # TODO: implement search criteria
     queryset = Flashcard.query_flashcards()
     return Response(FlashcardSerializer(queryset, many=True).data)
 
+
+### Deck Create
+
+### Deck Read
 @api_view(['GET'])
-#@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.IsAuthenticated])
+@renderer_classes([renderers.JSONRenderer])
+def rest_get_deck(request, deck_id):
+    try:
+        deck = Deck.objects.get(pk=deck_id)
+        # FIXME: we should possibly not distinguish between "not found" and "no permission" in production
+        if(deck.owner != request.user):
+            return Response({'error': 'You do not have permission to view this deck.'}, status=status.HTTP_403_FORBIDDEN)
+        serializer = DeckSerializer(deck)
+        return Response(deck.data)
+    except Deck.DoesNotExist:
+        return Response({'error': 'Deck not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+### Deck Update
+
+### Deck Delete
+
+### Deck Search
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 @renderer_classes([renderers.JSONRenderer])
 def rest_query_decks(request):
     # TODO: implement search criteria
     queryset = Deck.query_decks()
     return Response(DeckSerializer(queryset, many=True).data)
 
+### Deck Metadata Read
 
+### Deck Metadata Update
 

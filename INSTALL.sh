@@ -12,3 +12,5 @@ docker compose exec api-server python generate_sample_flashcards.py
 echo "Now go to http://localhost:8000/static/cardviewer.html to see the prototype."
 echo "Not everything is working yet, but you can create and edit cards at"
 echo "http://localhost:8000/admin/"
+
+echo "Note: frontend server is running at http://localhost:3000/"
