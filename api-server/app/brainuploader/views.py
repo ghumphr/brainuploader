@@ -14,12 +14,12 @@ from .serializers import FlashcardSerializer
 from .serializers import DeckSerializer
 
 
-class FlashcardDetailAPIView(generics.RetrieveAPIView):
+class FlashcardReadAPIView(generics.RetrieveAPIView):
     queryset = Flashcard.objects.all()
     serializer_class = FlashcardSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-class DeckDetailAPIView(generics.RetrieveAPIView):
+class DeckReadAPIView(generics.RetrieveAPIView):
     queryset = Deck.objects.all()
     serializer_class = DeckSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
@@ -68,7 +68,7 @@ def rest_create_flashcard(request, deck_id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 @renderer_classes([renderers.JSONRenderer])
-def rest_get_flashcard(request, flashcard_id):
+def rest_read_flashcard(request, flashcard_id):
     try:
         flashcard = Flashcard.objects.get(pk=flashcard_id)
         # FIXME: we should possibly not distinguish between "not found" and "no permission" in production
@@ -99,7 +99,7 @@ def rest_query_flashcards(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 @renderer_classes([renderers.JSONRenderer])
-def rest_get_deck(request, deck_id):
+def rest_read_deck(request, deck_id):
     try:
         deck = Deck.objects.get(pk=deck_id)
         # FIXME: we should possibly not distinguish between "not found" and "no permission" in production
