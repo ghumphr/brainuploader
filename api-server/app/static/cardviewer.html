@@ -119,7 +119,7 @@ $(document).ready(function() {
         error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
         timeout: 2000,
         type: "GET",
-        url: "../rest/flashcards/",
+        url: "../api/flashcards/",
         success: process_flashcards
     });
     
