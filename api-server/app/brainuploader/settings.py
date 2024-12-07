@@ -136,12 +136,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-        # Alternatively, you can use TokenAuthentication
+        # TODO: Token authentication provides superior security over session authentication, so its implementation is planned.
         # 'rest_framework.authentication.TokenAuthentication',
         #'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # Note: this is for prototyping purposes only
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',
     ),

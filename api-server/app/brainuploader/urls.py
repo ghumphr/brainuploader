@@ -16,29 +16,37 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from brainuploader.views import FlashcardCreateAPIView, FlashcardDetailAPIView, FlashcardQueryAPIView
-from brainuploader.views import DeckCreateAPIView, DeckDetailAPIView, DeckQueryAPIView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework import routers
+from brainuploader.views import FlashcardViewSet
+from brainuploader.views import DeckViewSet
+# TODO: eventually, we want to use token authentication
+#from rest_framework_simplejwt.views import (
+#    TokenObtainPairView,
+#    TokenRefreshView,
+#)
 from django.views.generic.base import TemplateView
 from brainuploader.views import SignUpView
+from brainuploader.views import DeckViewSet
+from brainuploader.views import FlashcardViewSet
 
-
+router = routers.DefaultRouter()
+router.register(r'flashcards', FlashcardViewSet, "flashcard-detail")
+router.register(r'decks', DeckViewSet, "deck-detail")
 
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('accounts/signup/', SignUpView.as_view(), name="signup"),
     path('accounts/', include('django.contrib.auth.urls')),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
-    path('api/flashcards/', FlashcardQueryAPIView.as_view(), name='rest_query_flashcards'),
-    path('api/flashcard/create/?deck=<int:pk>', FlashcardCreateAPIView.as_view(), name='flashcard_create_view'),
-    path('api/flashcard/<int:pk>/', FlashcardDetailAPIView.as_view(), name='flashcard_detail_view'),
-    path('api/decks/', DeckQueryAPIView.as_view(), name='rest_query_decks'),
-    path('api/deck/create/', DeckCreateAPIView.as_view(), name='deck_create_view'),
-    path('api/deck/<int:pk>/', DeckDetailAPIView.as_view(), name='deck_detail_view'),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+#    path('api/flashcards/', FlashcardQueryAPIView.as_view(), name='rest_query_flashcards'),
+#    path('api/flashcard/create/?deck=<int:pk>', FlashcardCreateAPIView.as_view(), name='flashcard_create_view'),
+#    path('api/flashcard/<int:pk>/', FlashcardDetailAPIView.as_view(), name='flashcard_detail_view'),
+#    path('api/decks/', DeckQueryAPIView.as_view(), name='rest_query_decks'),
+#    path('api/deck/create/', DeckCreateAPIView.as_view(), name='deck_create_view'),
+#    path('api/deck/<int:pk>/', DeckDetailAPIView.as_view(), name='deck_detail_view'),
+# Note: We are not currently using token authentication, but as it offers enhanced security, it will be considerd for the future.
+#    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+#    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
