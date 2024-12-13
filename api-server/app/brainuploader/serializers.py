@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import Flashcard
-from .models import Deck
+from brainuploader.models import Flashcard
+from brainuploader.models import Deck
+from django.core.exceptions import PermissionDenied
 
 class FlashcardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,12 +13,21 @@ class DeckSerializer(serializers.ModelSerializer):
         model = Deck
         fields = ['id', 'user', 'name', 'description',]
 
-class OwnerFlashcardSerializer(serializers.ModelSerializer):
+class UserFlashcardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flashcard
         # Note: the deck field requires careful validation on modification
         fields = ['next_review', 'times_right_in_a_row', 'front', 'back', 'deck']
         read_only_fields = ['id',]
+
+    # This makes sure the destination deck belongs to the current user
+    def to_internal_value(self, data):
+        if("deck" in data):
+            request = self.context.get('request', None)
+            deck = Deck.objects.get(pk=data["deck"])
+            if(deck is None or deck.user != request.user):
+                raise PermissionDenied("Illegal deck parameter.")
+        return super(UserFlashcardSerializer, self).to_internal_value(data)
 
 class PublicFlashcardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,7 +46,7 @@ class AdminFlashcardSerializer(serializers.ModelSerializer):
         model = Flashcard
         fields = '__all__'
 
-class OwnerDeckSerializer(serializers.ModelSerializer):
+class UserDeckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deck
         fields = ['user', 'name', 'description',]
