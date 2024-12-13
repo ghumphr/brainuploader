@@ -14,12 +14,12 @@ admin.site.register(Flashcard, FlashcardAdmin)
 
 
 class DeckAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name', 'description',)
-    search_fields = ('user', 'name', 'description',)
-    list_filter = ('user', 'name', 'description',)
-    list_filter = ('user', 'name', 'description',)
-    list_display_links = ('user', 'name', 'description',)
-    fields = ('user', 'name', 'description',)
+    list_display = ('user', 'name', 'description', 'is_public',)
+    search_fields = ('user', 'name', 'description', 'is_public',)
+    list_filter = ('user', 'name', 'description', 'is_public',)
+    list_filter = ('user', 'name', 'description', 'is_public',)
+    list_display_links = ('user', 'name', 'description', 'is_public',)
+    fields = ('user', 'name', 'description', 'is_public',)
     
 admin.site.register(Deck, DeckAdmin)
 
