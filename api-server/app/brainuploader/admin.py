@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Flashcard
-from .models import Deck
+from brainuploader.models import Flashcard
+from brainuploader.models import Deck
 
+# Set up admin interface for Flashcard model
 class FlashcardAdmin(admin.ModelAdmin):
     list_display = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
     search_fields = ('deck', 'next_review', 'times_right_in_a_row', 'front', 'back')
@@ -13,6 +14,7 @@ class FlashcardAdmin(admin.ModelAdmin):
 admin.site.register(Flashcard, FlashcardAdmin)
 
 
+# Set up admin interface for Deck model
 class DeckAdmin(admin.ModelAdmin):
     list_display = ('user', 'name', 'description', 'is_public',)
     search_fields = ('user', 'name', 'description', 'is_public',)

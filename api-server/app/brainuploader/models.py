@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+# A flashcard deck
+# Decks store all flashcards and link them to users and also link flashcards by topic
 class Deck(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=127)
@@ -12,6 +14,8 @@ class Deck(models.Model):
     def __str__(self):
         return self.name
 
+# A flashcard
+# Each flashcard is stored in a deck
 class Flashcard(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
     next_review = models.DateTimeField()
