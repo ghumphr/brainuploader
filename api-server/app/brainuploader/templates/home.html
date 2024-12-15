@@ -1,8 +1,7 @@
 <!--
-templates/home.html
-Source: https://learndjango.com/tutorials/django-login-and-logout-tutorial
+adapted from: https://learndjango.com/tutorials/django-login-and-logout-tutorial
 -->
-{% extends "base.html" %}
+{% extends "_base.html" %}
 
 {% block title %}Home{% endblock %}
 
@@ -22,4 +21,6 @@ Hi {{ user.username }}!
 <br/>
 <a href="{% url 'signup' %}">Sign up</a>
 {% endif %}
+<br/>
+<a href="/users/">Browse flashcard decks by user</a>
 {% endblock %}

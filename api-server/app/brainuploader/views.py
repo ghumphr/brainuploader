@@ -29,10 +29,12 @@ class SignUpView(CreateView):
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
 
+
 # This is used for listing user profiles
 def user_catalog(request):
     users = User.objects.all()
     return render(request, 'user_list.html', {'users': users})
+
 
 # This is used for showing the user profiles themselves
 def user_page(request, username):
@@ -42,6 +44,7 @@ def user_page(request, username):
     decks = DeckViewSet(request=request).get_queryset().filter(user=user)
 
     return render(request, 'user_profile.html', {'user': user, 'decks': decks})
+
 
 # This is used for showing the decks
 def deck_page(request, deck_id):
@@ -63,8 +66,9 @@ def deck_page(request, deck_id):
 
 # This implements the CRUD REST API for Flashcards.
 # Object-level validation takes place in the permission class.
-# Note that since we want field-level validation, we need to do additional checks.
+# Note that since we want field-level permissions checking, we need to do additional checks
 # (which currently take place on the serializer).
+# The really great thing about these is we can use them to pull querysets for use outside of the REST API.
 
 class FlashcardViewSet(viewsets.ModelViewSet):
 
@@ -97,8 +101,9 @@ class FlashcardViewSet(viewsets.ModelViewSet):
 
 # This implements the CRUD REST API for Decks
 # Object-level validation takes place in the permission class
-# Note that since we want field-level validation, we need to do additional checks
-# (which currently take place on the serializer)
+# Note that since we want field-level permissions checking on write,
+# we need to do additional checks (which currently take place on the serializer)
+
 class DeckViewSet(viewsets.ModelViewSet):
 
     permission_classes = [CanAccessDeck]
