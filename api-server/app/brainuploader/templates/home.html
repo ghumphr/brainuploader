@@ -9,6 +9,9 @@ Source: https://learndjango.com/tutorials/django-login-and-logout-tutorial
 {% block content %}
 {% if user.is_authenticated %}
 Hi {{ user.username }}!
+<p>
+<a href="static/cardviewer.html">Review Flashcards</a>
+</p>
 <form action="{% url 'logout' %}" method="post">
   {% csrf_token %}
   <button type="submit">Log Out</button>
@@ -16,5 +19,6 @@ Hi {{ user.username }}!
 {% else %}
 <p>You are not logged in</p>
 <a href="{% url 'login' %}">Log In</a>
+<a href="{% url 'signup' %}">Sign Up</a>
 {% endif %}
 {% endblock %}

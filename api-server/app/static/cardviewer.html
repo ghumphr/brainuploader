@@ -32,8 +32,39 @@
     </div>
     <script>
 
+//////
+// Global variables
+//////
+
+// This is the current stack of flashcards that the viewer is displaying
 var current_stack = [];
 
+
+/////
+// Copied functions
+//
+// The below two functions were shamelessly copied from other sources and are included here with citations
+// The rest of the code is my own original work except where other sources are cited
+////
+
+// Function to retrieve the value of a cookie
+// source: written by Google Gemini
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}            
+
+// Function to add days to date
+// source: https://www.geeksforgeeks.org/how-to-add-days-to-date-in-javascript/
+function addDays(date, days) {
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() + days);
+    return newDate;
+}
+
+
+// Display the question for the flashcard at the top of the stack
 function show_question()
 {
 //    alert("show_question() " + current_stack.length);
@@ -47,14 +78,11 @@ function show_question()
     }
     else
     {
-        $(".question").html("");
-        $(".answer").html("");
-        $(".answer-side").hide();
-        $(".question-side").show();
-        alert("There are no flashcards left.");
+        cycle_cards();
     }
 }
 
+// Display the answer for the flashcard at the top of the stack
 function show_answer()
 {
     if(current_stack.length > 0)
@@ -66,6 +94,20 @@ function show_answer()
     }
     else
     {
+        cycle_cards();
+    }
+}
+
+// Handle callback from AJAX call retrieving flashcards for viewing
+function process_flashcards(data, textStatus, jqXHR)
+{
+    current_stack = data;
+    if(current_stack.length > 0)
+    {
+        show_question();
+    }
+    else
+    {
         $(".answer").html("");
         $(".question-side").hide();
         $(".answer-side").show();
@@ -74,46 +116,10 @@ function show_answer()
     }
 }
 
-function process_flashcards(data, textStatus, jqXHR)
+
+// Grab a new batch of cards from the server and start viewing them
+function cycle_cards()
 {
-//    alert("process_flashcards()");
-    current_stack = data;
-    show_question();
-}
-
-
-
-$(document).ready(function() {
-    $(".flip-button").click(function() {
-        $(".question-side, .answer-side").toggle();
-    });
-
-    $(".skip-button").click(function() {
-        if(current_stack.length > 0)
-        {
-            a = current_stack.shift();
-            current_stack.push(a);
-        }
-        show_question();
-    });
-
-    $(".wrong-button").click(function() {
-        if(current_stack.length > 0)
-        {
-            a = current_stack.shift();
-            current_stack.push(a);
-        }
-        show_question();
-    });
-
-    $(".right-button").click(function() {
-        if(current_stack.length > 0)
-        {
-            a = current_stack.shift();
-        }
-        show_question();
-    });
-
     $.ajax({
         dataType: "json",
         error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
@@ -122,8 +128,109 @@ $(document).ready(function() {
         url: "../api/flashcards/",
         success: process_flashcards
     });
+}
+
+// Mark the current card in the viewer wrong
+function mark_current_card_wrong()
+{
+    if(current_stack.length > 0)
+    {
+        a = current_stack.shift();
+        a.times_right_in_a_row = 0;
+        var now = new Date();
+        a.next_review = now.toISOString();
+        current_stack.push(a);
+        $.ajax({
+            dataType: "json",
+            error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
+            timeout: 2000,
+            type: "PATCH",
+            url: "../api/flashcards/" + a.id + "/",
+            data: {
+                'next_review': a.next_review,
+                'times_right_in_a_row': a.times_right_in_a_row
+            },
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            success: show_question
+        });
+    }
+    else
+    {
+        show_question();
+    }
+}
+
+// Mark the current card in the viewer right
+function mark_current_card_right()
+{
+    if(current_stack.length > 0)
+    {
+        a = current_stack.shift();
+        a.times_right_in_a_row = a.times_right_in_a_row + 1;
+        var now = new Date();
+        a.next_review = (addDays(now, 2 ** (a.times_right_in_a_row - 1) - 1)).toISOString();
+        if(a <= 1)
+        {
+            current_stack.push(a);
+        }
+        $.ajax({
+            dataType: "json",
+            error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
+            timeout: 2000,
+            type: "PATCH",
+            url: "../api/flashcards/" + a.id + "/",
+            data:
+            {
+                'next_review': a.next_review,
+                'times_right_in_a_row': a.times_right_in_a_row
+            },
+            headers:
+            {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            success: show_question
+        });
+    }
+    else
+    {
+        show_question();
+    }
+}
+
+// Flip the current card in the viewer to display the other side
+function flip_current_card()
+{
+    $(".question-side, .answer-side").toggle();
+}
+
+// Skip the current card, putting it on the back of the currently displayed stack
+function skip_current_card()
+{
+    if(current_stack.length > 0)
+    {
+        a = current_stack.shift();
+        current_stack.push(a);
+    }
+    show_question();
+}
+
+
+// This runs after the page has completely loaded
+$(document).ready(function() {
+
+    // Set up button handlers
+    $(".flip-button").click(flip_current_card);
+    $(".skip-button").click(skip_current_card);
+    $(".wrong-button").click(mark_current_card_wrong);
+    $(".right-button").click(mark_current_card_right);
+
+    // Once the app is ready, grab some cards and display them
+    cycle_cards();
     
 });
+
     </script>
 </body>
 </html>
