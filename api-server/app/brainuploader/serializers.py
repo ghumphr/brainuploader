@@ -66,34 +66,32 @@ class UserFlashcardSerializer(FlashcardSerializer):
         # If the deck is being updated, make sure the update is legal
         if("deck" in data):
 
-            # First, make sure that the current deck (if any) belongs to the current user
-            # *** This should never be triggered due to the permissions model
-            # Code included here for debugging purposes
-            instance = self.instance  # Access the instance if it exists (for updates)
-            if instance:
-                previous_deck = instance.deck
-                if previous_deck:
-                    pd = Deck.objects.get(pk=previous_deck)
-                    if pd is None or pd.user != request.user:
-                        raise PermissionDenied("You do not own this card.")
+#            # First, make sure that the current deck (if any) belongs to the current user.
+#            # This should never be triggered due to the permissions model.
+#            instance = self.instance  # Access the instance if it exists (for updates)
+#            if instance:
+#                previous_deck = instance.deck
+#                if previous_deck:
+#                    pd = Deck.objects.get(pk=previous_deck)
+#                    if pd is None or pd.user != request.user:
+#                        raise PermissionDenied("You do not own this card.")
 
-            # Next, make sure that the destination deck belongs to the current user
-            # This is the important part
+            # Make sure that the destination deck belongs to the current user.
+            # This is the important part - this check can't be performed at the object level.
             deck = Deck.objects.get(pk=data["deck"])
             if(deck is None or deck.user != request.user):
                 raise PermissionDenied("Illegal deck parameter.")
 
-        # If the deck is not being updated, the card must already be in a deck owned by the user
-        # *** This should never be triggered due to the permissions model.
-        # Code included here for debugging purposes
-        else:
-            instance = self.instance  # Access the instance if it exists (for updates)
-            if instance:
-                pd = instance.deck
-                if pd is None or pd.user != request.user:
-                    raise PermissionDenied("You do not own this card.")
-            else:
-                raise PermissionDenied("A flashcard must belong to a deck.")
+#        # If the deck is not being updated, the card must already be in a deck owned by the user.
+#        # This should never be triggered due to the permissions model.
+#        else:
+#            instance = self.instance  # Access the instance if it exists (for updates)
+#            if instance:
+#                pd = instance.deck
+#                if pd is None or pd.user != request.user:
+#                    raise PermissionDenied("You do not own this card.")
+#            else:
+#                raise PermissionDenied("A flashcard must belong to a deck.")
 
         return data
 
