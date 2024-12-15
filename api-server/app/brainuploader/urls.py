@@ -19,34 +19,28 @@ from django.urls import include, path
 from rest_framework import routers
 from brainuploader.views import FlashcardViewSet
 from brainuploader.views import DeckViewSet
-# TODO: eventually, we want to use token authentication
-#from rest_framework_simplejwt.views import (
-#    TokenObtainPairView,
-#    TokenRefreshView,
-#)
 from django.views.generic.base import TemplateView
 from brainuploader.views import SignUpView
 from brainuploader.views import DeckViewSet
 from brainuploader.views import FlashcardViewSet
 
-router = routers.DefaultRouter()
-router.register(r'flashcards', FlashcardViewSet, "flashcard-detail")
-router.register(r'decks', DeckViewSet, "deck-detail")
+# This sets up the router for the CRUD/query API
+api_router = routers.DefaultRouter()
+api_router.register(r'flashcards', FlashcardViewSet, "flashcard-detail")
+api_router.register(r'decks', DeckViewSet, "deck-detail")
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    # Route the URLs for the CRUD/query API
+    path('api/', include(api_router.urls)),
+
+    # Route the URLs for Django admin interface
     path('admin/', admin.site.urls),
+
+    # Route URLs for the account management interface
     path('accounts/signup/', SignUpView.as_view(), name="signup"),
     path('accounts/', include('django.contrib.auth.urls')),
+
+    # Route the URL for the landing page
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
-#    path('api/flashcards/', FlashcardQueryAPIView.as_view(), name='rest_query_flashcards'),
-#    path('api/flashcard/create/?deck=<int:pk>', FlashcardCreateAPIView.as_view(), name='flashcard_create_view'),
-#    path('api/flashcard/<int:pk>/', FlashcardDetailAPIView.as_view(), name='flashcard_detail_view'),
-#    path('api/decks/', DeckQueryAPIView.as_view(), name='rest_query_decks'),
-#    path('api/deck/create/', DeckCreateAPIView.as_view(), name='deck_create_view'),
-#    path('api/deck/<int:pk>/', DeckDetailAPIView.as_view(), name='deck_detail_view'),
-# Note: We are not currently using token authentication, but as it offers enhanced security, it will be considerd for the future.
-#    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-#    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 

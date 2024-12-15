@@ -121,10 +121,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'pages/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "brainuploader/pages",
 ]
 
 # Default primary key field type
