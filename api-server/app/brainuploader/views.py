@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from brainuploader.permissions import IsOwner
-from brainuploader.permissions import IsDeckOwner
+from brainuploader.permissions import CanAccessFlashcard
+from brainuploader.permissions import CanAccessDeck
 from rest_framework import generics
 from django.db.models import Q
 from rest_framework import viewsets
@@ -31,8 +31,14 @@ class SignUpView(CreateView):
 
 # see for more details on generics: https://www.django-rest-framework.org/api-guide/generic-views/
 
+# This implements the CRUD REST API for Flashcards.
+# Object-level validation takes place in the permission class.
+# Note that since we want field-level validation, we need to do additional checks.
+# (which currently take place on the serializer).
+
 class FlashcardViewSet(viewsets.ModelViewSet):
-    #serializer_class = FlashcardSerializer
+
+    permission_classes = [CanAccessFlashcard]
 
     def get_serializer_class(self):
         if self.request.user.is_superuser:
@@ -43,42 +49,30 @@ class FlashcardViewSet(viewsets.ModelViewSet):
             return UserFlashcardSerializer
         return PublicFlashcardSerializer
 
-#    def get_queryset(self):
-#        """
-#        This view should return a list of all the flashcards in decks
-#        owned by the currently authenticated user or in public decks.
-#        """
-#        user = self.request.user
-#        user_viewset = Flashcard.objects.none()
-#        if(user is not None):
-#            if(user.is_staff or user.is_superuser):
-#                user_viewset = Flashcard.objects.all()
-#            else:
-#                user_viewset = Flashcard.objects.all().filter(deck__user=user)
-#        else:
-#            user_viewset = Flashcard.objects.none()
-#        public_viewset = Flashcard.objects.all().filter(deck__is_public=True)
-#        return public_viewset.union(user_viewset)
-
-
     def get_queryset(self):
         """
         This view should return a list of all the flashcards in decks
         owned by the currently authenticated user or in public decks.
         """
         user = self.request.user
-        if(user is not None):
+        if(user.is_authenticated):
             if(user.is_staff or user.is_superuser):
                 return Flashcard.objects.all()
             else:
                 return Flashcard.objects.all().filter(Q(deck__is_public=True) | Q(deck__user=user))
         else:
-                return Flashcard.objects.all().filter(deck__is_public=True)
+            return Flashcard.objects.all().filter(deck__is_public=True)
 
 
 
+# This implements the CRUD REST API for Decks
+# Object-level validation takes place in the permission class
+# Note that since we want field-level validation, we need to do additional checks
+# (which currently take place on the serializer)
 class DeckViewSet(viewsets.ModelViewSet):
-#    serializer_class = DeckSerializer
+
+    permission_classes = [CanAccessDeck]
+
     def get_serializer_class(self):
         if self.request.user.is_superuser:
             return AdminDeckSerializer
@@ -94,9 +88,10 @@ class DeckViewSet(viewsets.ModelViewSet):
         owned by the currently authenticated user or public.
         """
         user = self.request.user
-        if(user is not None):
+        if(user.is_authenticated):
             if(user.is_staff or user.is_superuser):
                 return Deck.objects.all()
-        # Return all public decks and all user decks (even if user is None)
-        return Deck.objects.all().filter(user==user).union(Deck.objects.all().filter(is_public=True))
+            # Return all public decks and all user decks
+            return Deck.objects.all().filter(user==user).union(Deck.objects.all().filter(is_public=True))
+        return Deck.objects.all().filter(is_public=True)
 
