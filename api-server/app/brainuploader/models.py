@@ -4,7 +4,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # A flashcard deck
-# Decks store all flashcards and link them to users and also link flashcards by topic
+# Decks store all flashcards and link them to Users
+# It is intended for each Deck to cover a single topic
+# Anyone can view the contents of a public Deck, but only the user/superuser/staff can view a Deck that is not public
 class Deck(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=127)
@@ -15,7 +17,7 @@ class Deck(models.Model):
         return self.name
 
 # A flashcard
-# Each flashcard is stored in a deck
+# Each Flashcard is stored in a Deck
 class Flashcard(models.Model):
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
     next_review = models.DateTimeField()

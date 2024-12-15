@@ -36,6 +36,7 @@ class DeckSerializer(serializers.ModelSerializer):
 
 # This serializer is used for serializing flashcards for authenticated users
 # It ensures that the deck belongs to the current user
+# This is more complex than I would like, but we need field-level permission validation.
 class UserFlashcardSerializer(FlashcardSerializer):
     class Meta:
         model = Flashcard
@@ -47,12 +48,12 @@ class UserFlashcardSerializer(FlashcardSerializer):
     def to_internal_value(self, data):
 
         # First, call the current method on the parent object
-        return super(UserFlashcardSerializer, self).to_internal_value(data)
+        data = super(UserFlashcardSerializer, self).to_internal_value(data)
 
         # This should never return None because otherwise, what is the current user?
         request = self.context.get('request', None)
         if request is None:
-            raise PermissionDenied("User actions require a current user.")
+            raise PermissionDenied("User actions require a current context.")
 
         # If a user is changing the deck, we need to make sure the change is authorized.
         # 1. A user may move a card from one of their own decks into another of their own decks
@@ -60,11 +61,14 @@ class UserFlashcardSerializer(FlashcardSerializer):
         # 3. Any other changes to the deck key by users are denied
         # Also, every card must belong to a deck
         # Aside from users and admins, no one should be modifying anything
+        # Most of these checks *should* be made elsewhere, but the destination deck owner must be checked here.
 
         # If the deck is being updated, make sure the update is legal
         if("deck" in data):
 
             # First, make sure that the current deck (if any) belongs to the current user
+            # *** This should never be triggered due to the permissions model
+            # Code included here for debugging purposes
             instance = self.instance  # Access the instance if it exists (for updates)
             if instance:
                 previous_deck = instance.deck
@@ -74,11 +78,14 @@ class UserFlashcardSerializer(FlashcardSerializer):
                         raise PermissionDenied("You do not own this card.")
 
             # Next, make sure that the destination deck belongs to the current user
+            # This is the important part
             deck = Deck.objects.get(pk=data["deck"])
             if(deck is None or deck.user != request.user):
                 raise PermissionDenied("Illegal deck parameter.")
 
         # If the deck is not being updated, the card must already be in a deck owned by the user
+        # *** This should never be triggered due to the permissions model.
+        # Code included here for debugging purposes
         else:
             instance = self.instance  # Access the instance if it exists (for updates)
             if instance:
@@ -87,6 +94,8 @@ class UserFlashcardSerializer(FlashcardSerializer):
                     raise PermissionDenied("You do not own this card.")
             else:
                 raise PermissionDenied("A flashcard must belong to a deck.")
+
+        return data
 
 
 # This serializer is used to allow unauthenticated users to see public flashcards

@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from brainuploader.models import Deck
 
 class CanAccessDeck(permissions.BasePermission):
     """
@@ -10,9 +11,9 @@ class CanAccessDeck(permissions.BasePermission):
     def has_object_permission(self, request, view, deck):
         if deck.is_public and request.method in permissions.SAFE_METHODS:
             return True
-        if request.user.is_superuser():
+        if request.user.is_superuser:
             return True
-        if request.user.is_staff() and request.method in permissions.SAFE_METHODS:
+        if request.user.is_staff and request.method in permissions.SAFE_METHODS:
             return True
         if deck.user == request.user:
             return True
@@ -25,11 +26,11 @@ class CanAccessFlashcard(permissions.BasePermission):
     if flashcard's deck is not public.
     """
     def has_object_permission(self, request, view, flashcard):
-        if request.user.is_superuser():
+        if request.user.is_superuser:
             return True
-        if request.user.is_staff() and request.method in permissions.SAFE_METHODS:
+        if request.user.is_staff and request.method in permissions.SAFE_METHODS:
             return True
-        deck = Deck.objects.get(flashcard.deck)
+        deck = flashcard.deck
         if deck.is_public and request.method in permissions.SAFE_METHODS:
             return True
         if deck.user == request.user:
