@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from brainuploader.permissions import CanAccessFlashcard
 from brainuploader.permissions import CanAccessDeck
 from rest_framework import generics
@@ -15,6 +15,7 @@ from brainuploader.serializers import UserDeckSerializer, AdminDeckSerializer, P
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from django.http import Http404
 
 # Create your views here.
 
@@ -27,6 +28,35 @@ class SignUpView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+# This is used for listing user profiles
+def user_catalog(request):
+    users = User.objects.all()
+    return render(request, 'user_list.html', {'users': users})
+
+# This is used for showing the user profiles themselves
+def user_page(request, username):
+    user = get_object_or_404(User, username=username)
+    
+    # This grabs a list of the decks that we are allowed to view
+    decks = DeckViewSet(request=request).get_queryset().filter(user=user)
+
+    return render(request, 'user_profile.html', {'user': user, 'decks': decks})
+
+# This is used for showing the decks
+def deck_page(request, deck_id):
+
+    # Retrieve the deck (if we are allowed to view it)
+    deck = DeckViewSet(request=request).get_queryset().filter(id=deck_id).first()
+
+    if deck is None:
+        raise Http404
+
+    # Now retrieve the flashcards (if we are allowed to view them)
+    flashcards = FlashcardViewSet(request=request).get_queryset().filter(deck=deck)
+
+    return render(request, 'deck.html', {'deck': deck, 'flashcards': flashcards})
+
 
 
 # see for more details on generics: https://www.django-rest-framework.org/api-guide/generic-views/

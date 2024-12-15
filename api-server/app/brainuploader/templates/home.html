@@ -10,7 +10,7 @@ Source: https://learndjango.com/tutorials/django-login-and-logout-tutorial
 {% if user.is_authenticated %}
 Hi {{ user.username }}!
 <p>
-<a href="pages/cardviewer.html">Review Flashcards</a>
+<a href="pages/cardviewer.html">Review flashcards</a>
 </p>
 <form action="{% url 'logout' %}" method="post">
   {% csrf_token %}
@@ -18,7 +18,8 @@ Hi {{ user.username }}!
 </form>
 {% else %}
 <p>You are not logged in</p>
-<a href="{% url 'login' %}">Log In</a>
-<a href="{% url 'signup' %}">Sign Up</a>
+<a href="{% url 'login' %}">Log in</a>
+<br/>
+<a href="{% url 'signup' %}">Sign up</a>
 {% endif %}
 {% endblock %}

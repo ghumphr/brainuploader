@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Deck {{deck.name}} {% endblock %}
+
+{% block content %}
+
+    <ul>
+        {% for flashcard in flashcards %}
+        <li>
+          <h2>Q:</h2><p>{{ flashcard.front }}</p>
+          <h2>A:</h2><p>{{ flashcard.back }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
+

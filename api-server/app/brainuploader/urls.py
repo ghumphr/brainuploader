@@ -19,10 +19,14 @@ from django.urls import include, path
 from rest_framework import routers
 from brainuploader.views import FlashcardViewSet
 from brainuploader.views import DeckViewSet
-from django.views.generic.base import TemplateView
 from brainuploader.views import SignUpView
 from brainuploader.views import DeckViewSet
 from brainuploader.views import FlashcardViewSet
+from brainuploader.views import user_catalog
+from brainuploader.views import user_page
+from brainuploader.views import deck_page
+
+from django.views.generic.base import TemplateView
 
 # This sets up the router for the CRUD/query API
 api_router = routers.DefaultRouter()
@@ -39,6 +43,11 @@ urlpatterns = [
     # Route URLs for the account management interface
     path('accounts/signup/', SignUpView.as_view(), name="signup"),
     path('accounts/', include('django.contrib.auth.urls')),
+
+    # Route URLs for user list
+    path('users/', user_catalog, name='user_catalog'),
+    path('users/<str:username>/', user_page, name='user_page'),
+    path('decks/<int:deck_id>/', deck_page, name='deck_page'),
 
     # Route the URL for the landing page
     path("", TemplateView.as_view(template_name="home.html"), name="home"),

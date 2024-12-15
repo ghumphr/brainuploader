@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s profile{% endblock %}
+
+{% block content %}
+<h1> {{ user.username }}'s decks</h1>
+    <ul>
+        {% for deck in decks %}
+            <li>
+<a href="{% url 'deck_page' deck.id %}">{{ deck.name }}</a>
+<p>{{deck.description}}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
