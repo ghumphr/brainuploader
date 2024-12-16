@@ -126,6 +126,9 @@ function cycle_cards()
         timeout: 2000,
         type: "GET",
         url: "../api/flashcards/",
+        data: {
+            review_before: (new Date()).toISOString()
+        },
         success: process_flashcards
     });
 }

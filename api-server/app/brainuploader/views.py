@@ -16,12 +16,26 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.http import Http404
+from datetime import datetime
+import re
 
 # Create your views here.
 
 # We plan to rely on the Django REST framework, which automatically escapes HTML
 # entities. This is much less tedious and error-prone than doing it ourselves.
 
+
+# Validate an ISO timestamp
+# source: https://stackoverflow.com/questions/41129921/validate-an-iso-8601-datetime-string-in-python
+iso8601_regex = r'^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$'
+match_iso8601 = re.compile(iso8601_regex).match
+def validate_iso8601(str_val):
+    try:            
+        if match_iso8601( str_val ) is not None:
+            return True
+    except:
+        pass
+    return False
 
 # This is used for the user signup
 class SignUpView(CreateView):
@@ -96,6 +110,23 @@ class FlashcardViewSet(viewsets.ModelViewSet):
                 return Flashcard.objects.all().filter(Q(deck__is_public=True) | Q(deck__user=user))
         else:
             return Flashcard.objects.all().filter(deck__is_public=True)
+
+    def list(self, request):
+        rv = self.get_queryset();
+        rb = request.GET.get('review_before')
+        if(rb):
+            # Note: any reference to review_before will restricted the returned cards to
+            # only to the current user
+            user = request.user
+            if(not validate_iso8601(rb) or not user.is_authenticated):
+                raise Http404
+            review_before = datetime.fromisoformat(rb)
+            rv = rv.filter(next_review__lt=review_before, deck__user=user)
+        sc = self.get_serializer_class()
+        serializer = sc(rv, many=True)
+        return Response(serializer.data)
+        
+
 
 
 
