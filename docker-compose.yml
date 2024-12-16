@@ -7,12 +7,12 @@ services:
       python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./api-server/app:/app
-  frontend:
-    build: ./frontend/
-    ports:
-      - 3000:3000
-    command:
-      npx vite --port 3000 --host
-    volumes:
-      - ./frontend/app:/app
+#  frontend:
+#    build: ./frontend/
+#    ports:
+#      - 3000:3000
+#    command:
+#      npx vite --port 3000 --host
+#    volumes:
+#      - ./frontend/app:/app
       

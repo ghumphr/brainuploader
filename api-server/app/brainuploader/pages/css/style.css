@@ -4,6 +4,12 @@
     align-items: center;
 }
 
+.flashcard-editor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .flashcard {
     width: 620px;
     height: 460px;
@@ -27,7 +33,7 @@
     border: none;
     border-radius: 5px;
     background-color: #bebe00;
-    color: white;
+    color: black;
     cursor: pointer;   
     white-space: normal;
 }

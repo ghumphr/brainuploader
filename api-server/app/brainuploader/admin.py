@@ -1,6 +1,8 @@
 from django.contrib import admin
 from brainuploader.models import Flashcard
 from brainuploader.models import Deck
+from django.forms import Textarea
+from django.db import models
 
 # Set up admin interface for Flashcard model
 class FlashcardAdmin(admin.ModelAdmin):

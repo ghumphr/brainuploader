@@ -10,20 +10,24 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Deck(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=127)
-    description = models.CharField(max_length=4094)
+    description = models.TextField(max_length=4094)
     is_public = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
+
 # A flashcard
 # Each Flashcard is stored in a Deck
 class Flashcard(models.Model):
-    deck = models.ForeignKey(Deck, on_delete=models.CASCADE)
-    next_review = models.DateTimeField()
+
+    # Note: decks shouldn't actually be null, but null=True is required because the default value depends on request data
+    deck = models.ForeignKey(Deck, on_delete=models.CASCADE, null=True)
+
+    next_review = models.DateTimeField(auto_now_add=True)
     times_right_in_a_row = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(30)])
-    front = models.CharField(max_length=16382)
-    back = models.CharField(max_length=16382)
+    front = models.TextField(max_length=16382, blank=True)
+    back = models.TextField(max_length=16382, blank=True)
 
     def __str__(self):
         return "Q:" + self.front + "\n" + "A:" + self.back

@@ -5,7 +5,13 @@
 <body>
     <!-- TODO: this should use a local copy or perhaps a trusted CDN with hash -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<div class="flashcard-viewer">
     <div class="flashcard-container">
+
+<table>
+<tr> <td> </td> <td> <button class="button edit-button">Edit</button> </td> <td> <button class="button new-button">New</button> </td> </tr>
+</table>
+
         <div class="flashcard question-side" style="display:none;">
             <h1>Q:</h1>
             <div class="question">
@@ -18,6 +24,7 @@
                 <p>Paris</p>
             </div>
         </div>
+
 <table>
 <tr> <td></td> <td> <button class="button flip-button">Flip</button> </td> <td></td> </tr>
 <tr> <td>
@@ -27,9 +34,28 @@
 </td> </tr>
 <tr> <td></td> <td> <button class="button skip-button">Skip</button> </td> <td></td> </tr>
 </table>
-<!--        <button class="button edit-button">Edit</button>
-        <button class="button new-button">New</button> -->
+
+</div>
+</div>
+
+<div class="flashcard-editor">
+<table>
+<tr>
+        <td><button class="button save-button">Save</button></td>
+        <td><button class="button cancel-edit-button">Cancel</button></td>
+        <td><button class="button delete-button">Delete</button></td>
+</tr>
+</table>
+<h1>Q:</h1>
+<textarea id="question-editor" rows="24" cols="80"></textarea>
+
+<h1>A:</h1>
+<textarea id="answer-editor" rows="24" cols="80""></textarea>
+
+
     </div>
+
+</div>
     <script>
 
 //////
@@ -63,18 +89,50 @@ function addDays(date, days) {
     return newDate;
 }
 
+// This performs some *extremely* basic transformations on text for display
+// This function does not perform any security functions - the text should *not* contain unsanitized html
+function transform_to_flashcard(txt)
+{
+    txt = txt.replaceAll("\n", " <br/>");
+    return(txt);
+}
+
+function notnull(s)
+{
+    s = s + "";
+    return(s);
+}
+
+// Populate all fields with the current card
+function populate()
+{
+    console.log(current_stack);
+    if(current_stack.length > 0)
+    {
+        $(".answer").html(transform_to_flashcard(current_stack[0].back));
+        $(".question").html(transform_to_flashcard(current_stack[0].front));
+        $("#answer-editor").text(notnull(current_stack[0].back));
+        $("#question-editor").text(notnull(current_stack[0].front));
+    }
+    else
+    {
+        $(".answer").html("");
+        $(".question").html("");
+        $("#answer-editor").text("");
+        $("#question-editor").text("");
+    }
+}
 
 // Display the question for the flashcard at the top of the stack
 function show_question()
 {
-//    alert("show_question() " + current_stack.length);
+    $(".flashcard-editor").hide();
+    $(".flashcard-viewer").show();
     if(current_stack.length > 0)
     {
-//        alert(current_stack[0].front);
-        $(".question").html(current_stack[0].front);
         $(".answer-side").hide();
+        populate();
         $(".question-side").show();
-        $(".answer").html(current_stack[0].back);
     }
     else
     {
@@ -85,17 +143,32 @@ function show_question()
 // Display the answer for the flashcard at the top of the stack
 function show_answer()
 {
+    $(".flashcard-editor").hide();
+    $(".flashcard-viewer").show();
     if(current_stack.length > 0)
     {
-//        alert(current_stack[0].back);
-        $(".answer").html(current_stack[0].back);
         $(".question-side").hide();
-        $(".question").html(current_stack[0].back);
+        populate()
+        $(".answer-side").show();
     }
     else
     {
         cycle_cards();
     }
+}
+
+// Put the app into edit mode
+function show_editor()
+{
+    $(".flashcard-viewer").hide();
+    $(".flashcard-editor").show();
+}
+
+// Put the app into review mode
+function show_viewer()
+{
+    $(".flashcard-viewer").show();
+    $(".flashcard-editor").hide();
 }
 
 // Handle callback from AJAX call retrieving flashcards for viewing
@@ -108,16 +181,15 @@ function process_flashcards(data, textStatus, jqXHR)
     }
     else
     {
-        $(".answer").html("");
-        $(".question-side").hide();
-        $(".answer-side").show();
-        $(".question").html("");
+        populate();
+        $(".question-side").show();
+        $(".answer-side").hide();
         alert("There are no flashcards left.");
     }
 }
 
 
-// Grab a new batch of cards from the server and start viewing them
+// Grab a batch of cards from the server and start viewing them
 function cycle_cards()
 {
     $.ajax({
@@ -138,7 +210,7 @@ function mark_current_card_wrong()
 {
     if(current_stack.length > 0)
     {
-        a = current_stack.shift();
+        var a = current_stack.shift();
         a.times_right_in_a_row = 0;
         var now = new Date();
         a.next_review = now.toISOString();
@@ -170,7 +242,7 @@ function mark_current_card_right()
 {
     if(current_stack.length > 0)
     {
-        a = current_stack.shift();
+        var a = current_stack.shift();
         a.times_right_in_a_row = a.times_right_in_a_row + 1;
         var now = new Date();
         a.next_review = (addDays(now, 2 ** (a.times_right_in_a_row - 1) - 1)).toISOString();
@@ -213,21 +285,145 @@ function skip_current_card()
 {
     if(current_stack.length > 0)
     {
-        a = current_stack.shift();
+        var a = current_stack.shift();
         current_stack.push(a);
     }
     show_question();
 }
 
+function edit_current_card()
+{
+    if(current_stack.length > 0)
+    {
+        populate();
+        show_editor();
+    }
+    else
+    {
+        alert("There are no cards available to edit.")
+    }
+}
+
+
+
+function process_new_success(data, textStatus, jqXHR)
+{
+    current_stack.unshift(data);
+    populate();
+    show_editor();
+}
+
+
+function new_card()
+{
+    $.ajax({
+        dataType: "json",
+        error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
+        timeout: 2000,
+        type: "POST",
+        url: "../api/flashcards/",
+        data: {
+            front: "",
+            back: ""
+        },
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        success: process_new_success
+    });
+}
+
+function cancel_edit()
+{
+    populate();
+    $(".flashcard-editor").hide();
+    $(".flashcard-viewer").show();
+}
+
+function process_edit_success(data, textStatus, jqXHR)
+{
+    current_stack[0] = data;
+    populate();
+}
+
+function save_current_card()
+{
+    if(current_stack.length > 0)
+    {
+        var a = current_stack[0];
+
+        $.ajax({
+            dataType: "json",
+            error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
+            timeout: 2000,
+            type: "PATCH",
+            url: "../api/flashcards/" + a.id + "/",
+            data: {
+                front: $("#question-editor").val(),
+                back: $("#answer-editor").val()
+            },
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            success: process_edit_success
+        });
+        show_viewer();
+    }
+    else
+    {
+        alert("There is no card to save!");
+    }
+}
+
+function process_delete_success(data, textStatus, jqXHR)
+{
+}
+
+function delete_current_card()
+{
+    if(current_stack.length > 0)
+    {
+        var a = current_stack.shift()
+
+        $.ajax({
+            dataType: "json",
+            error: function(jqXHR, textStatus, errorThrown) { alert(textStatus); },
+            timeout: 2000,
+            type: "DELETE",
+            url: "../api/flashcards/" + a.id + "/",
+            data: {
+            },
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            success: process_delete_success
+        });
+        populate();
+        show_question();
+    }
+    else
+    {
+        populate();
+        alert("There is no card to delete!");
+    }
+}
 
 // This runs after the page has completely loaded
 $(document).ready(function() {
+
+    show_viewer();
 
     // Set up button handlers
     $(".flip-button").click(flip_current_card);
     $(".skip-button").click(skip_current_card);
     $(".wrong-button").click(mark_current_card_wrong);
     $(".right-button").click(mark_current_card_right);
+
+    $(".edit-button").click(edit_current_card);
+    $(".new-button").click(new_card);
+    $(".cancel-edit-button").click(cancel_edit);
+    $(".save-button").click(save_current_card);
+    $(".delete-button").click(delete_current_card);
 
     // Once the app is ready, grab some cards and display them
     cycle_cards();

@@ -76,6 +76,9 @@ def deck_page(request, deck_id):
 
 
 
+
+
+
 # see for more details on generics: https://www.django-rest-framework.org/api-guide/generic-views/
 
 # This implements the CRUD REST API for Flashcards.
@@ -101,6 +104,8 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         """
         This view should return a list of all the flashcards in decks
         owned by the currently authenticated user or in public decks.
+        Sometimes, it is recommended to perform request queries here here, but 
+        we feel they are better implemented in the request handlers.
         """
         user = self.request.user
         if(user.is_authenticated):
@@ -112,12 +117,16 @@ class FlashcardViewSet(viewsets.ModelViewSet):
             return Flashcard.objects.all().filter(deck__is_public=True)
 
     def list(self, request):
+        # rv is Return Value
         rv = self.get_queryset();
+
+        # Note: any reference to review_before will restrict the set of returned cards
+        # to those in decks belonging to the current user
         rb = request.GET.get('review_before')
         if(rb):
-            # Note: any reference to review_before will restricted the returned cards to
-            # only to the current user
             user = request.user
+
+            # If the timestamp is not valid or the user is not logged, in, throw a Not Found
             if(not validate_iso8601(rb) or not user.is_authenticated):
                 raise Http404
             review_before = datetime.fromisoformat(rb)
@@ -125,15 +134,33 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         sc = self.get_serializer_class()
         serializer = sc(rv, many=True)
         return Response(serializer.data)
+
+
+    # Get the user's default deck. If they don't have any decks, create one.
+    def get_default_deck(self):
+        user = self.request.user
+        # staff aren't really supposed to be creating decks
+        if(not user.is_authenticated or user.is_staff):
+            raise Http404
+        deck = Deck.objects.filter(user=user).first()
+        if deck is None:
+            deck = Deck(user=user, name="default", description="default deck", is_public=True)
+            deck.save()
+        return deck
+
+    # This handles POST requests to /api/flashcards/. If there is no deck, we need to assign one.
+    def perform_create(self, serializer):
+        deck = self.request.data.get('deck')
+        if deck is None:
+            deck = self.get_default_deck()
+        serializer.save(deck=deck)
         
-
-
 
 
 # This implements the CRUD REST API for Decks
 # Object-level validation takes place in the permission class
 # Note that since we want field-level permissions checking on write,
-# we need to do additional checks (which currently take place on the serializer)
+# we need to do additional checks (which currently take place in the serializer)
 
 class DeckViewSet(viewsets.ModelViewSet):
 
