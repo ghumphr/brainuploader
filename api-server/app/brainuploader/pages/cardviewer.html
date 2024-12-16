@@ -91,14 +91,19 @@ function addDays(date, days) {
 
 // This performs some *extremely* basic transformations on text for display
 // This function does not perform any security functions - the text should *not* contain unsanitized html
+
 function transform_to_flashcard(txt)
 {
     txt = txt.replaceAll("\n", " <br/>");
     return(txt);
 }
 
-function notnull(s)
+// This performs some basic transformations on text for editing
+// Note: the rendered text is *not* safe for display
+function transform_to_editable(s)
 {
+    s = s + "";
+    s = $('<div/>').html(s).text();
     s = s + "";
     return(s);
 }
@@ -111,8 +116,8 @@ function populate()
     {
         $(".answer").html(transform_to_flashcard(current_stack[0].back));
         $(".question").html(transform_to_flashcard(current_stack[0].front));
-        $("#answer-editor").val(notnull(current_stack[0].back));
-        $("#question-editor").val(notnull(current_stack[0].front));
+        $("#answer-editor").val(transform_to_editable(current_stack[0].back));
+        $("#question-editor").val(transform_to_editable(current_stack[0].front));
     }
     else
     {
