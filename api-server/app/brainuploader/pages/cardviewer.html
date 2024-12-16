@@ -111,7 +111,6 @@ function transform_to_editable(s)
 // Populate all fields with the current card
 function populate()
 {
-    console.log(current_stack);
     if(current_stack.length > 0)
     {
         $(".answer").html(transform_to_flashcard(current_stack[0].back));
