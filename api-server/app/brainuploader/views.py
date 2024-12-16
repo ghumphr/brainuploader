@@ -224,3 +224,29 @@ class DeckViewSet(viewsets.ModelViewSet):
         # If the user is not authenticated, they can view only public decks
         return Deck.objects.all().filter(is_public=True)
 
+
+    def list(self, request):
+        """
+        This implements the API call requesting a listing of flashcards.
+        """
+
+        # rv is Return Value
+        rv = self.get_queryset();
+        mine = request.GET.get('mine_only')
+        if mine is not None:
+            if mine.lower() in ("true", 1):
+                mine = True
+            else:
+                mine = False
+        else:
+            mine = False
+        if(mine):
+            if(self.request.user.is_authenticated):
+                rv = rv.filter(user=self.request.user)
+            else:
+                raise Http404
+        sc = self.get_serializer_class()
+        serializer = sc(rv, many=True)
+        return Response(serializer.data)
+
+
