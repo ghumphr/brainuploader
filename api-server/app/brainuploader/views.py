@@ -85,7 +85,6 @@ def deck_page(request, deck_id):
 # Object-level validation takes place in the permission class.
 # Note that since we want field-level permissions checking, we need to do additional checks
 # (which currently take place on the serializer).
-# The really great thing about these is we can use them to pull querysets for use outside of the REST API.
 
 class FlashcardViewSet(viewsets.ModelViewSet):
 
@@ -104,8 +103,6 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         """
         This view should return a list of all the flashcards in decks
         owned by the currently authenticated user or in public decks.
-        Sometimes, it is recommended to perform request queries here here, but 
-        we feel they are better implemented in the request handlers.
         """
         user = self.request.user
         if(user.is_authenticated):
@@ -191,7 +188,6 @@ class DeckViewSet(viewsets.ModelViewSet):
             if(user.is_staff or user.is_superuser):
                 return Deck.objects.all()
             # Return all public decks and all user decks
-            #return Deck.objects.all().filter(user==user).union(Deck.objects.all().filter(is_public=True))
             return Deck.objects.all().filter(Q(is_public=True) | Q(user=user))
         return Deck.objects.all().filter(is_public=True)
 
