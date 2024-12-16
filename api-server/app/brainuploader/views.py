@@ -160,7 +160,7 @@ class FlashcardViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
         # staff aren't really supposed to be creating decks
-        if(not user.is_authenticated or user.is_staff):
+        if(not user.is_authenticated):
             raise Http404
 
         # TODO: this should work to limit to the available queryset, but it throws strange errors
