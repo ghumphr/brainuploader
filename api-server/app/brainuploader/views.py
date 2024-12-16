@@ -54,7 +54,7 @@ def user_catalog(request):
 def user_page(request, username):
     user = get_object_or_404(User, username=username)
     
-    # This grabs a list of the decks that we are allowed to view
+    # This grabs a list of the decks that belong to the user that we are allowed to view
     decks = DeckViewSet(request=request).get_queryset().filter(user=user)
 
     return render(request, 'user_profile.html', {'user': user, 'decks': decks})
@@ -142,9 +142,15 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         # staff aren't really supposed to be creating decks
         if(not user.is_authenticated or user.is_staff):
             raise Http404
+
+        # TODO: this should work to limit to the available queryset, but it throws strange errors
+        # the alternative works also but doesn't keep security checks in one place
+        #decks = DeckViewSet(request=self.request).get_queryset().filter(user=user).first()
         deck = Deck.objects.filter(user=user).first()
+
+        # If there is no default deck, create one
         if deck is None:
-            deck = Deck(user=user, name="default", description="default deck", is_public=True)
+            deck = Deck(user=user, name="default", description="Default deck", is_public=True)
             deck.save()
         return deck
 
@@ -185,6 +191,7 @@ class DeckViewSet(viewsets.ModelViewSet):
             if(user.is_staff or user.is_superuser):
                 return Deck.objects.all()
             # Return all public decks and all user decks
-            return Deck.objects.all().filter(user==user).union(Deck.objects.all().filter(is_public=True))
+            #return Deck.objects.all().filter(user==user).union(Deck.objects.all().filter(is_public=True))
+            return Deck.objects.all().filter(Q(is_public=True) | Q(user=user))
         return Deck.objects.all().filter(is_public=True)
 

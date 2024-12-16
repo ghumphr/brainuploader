@@ -111,15 +111,15 @@ function populate()
     {
         $(".answer").html(transform_to_flashcard(current_stack[0].back));
         $(".question").html(transform_to_flashcard(current_stack[0].front));
-        $("#answer-editor").text(notnull(current_stack[0].back));
-        $("#question-editor").text(notnull(current_stack[0].front));
+        $("#answer-editor").val(notnull(current_stack[0].back));
+        $("#question-editor").val(notnull(current_stack[0].front));
     }
     else
     {
         $(".answer").html("");
         $(".question").html("");
-        $("#answer-editor").text("");
-        $("#question-editor").text("");
+        $("#answer-editor").val("");
+        $("#question-editor").val("");
     }
 }
 
@@ -308,6 +308,8 @@ function edit_current_card()
 
 function process_new_success(data, textStatus, jqXHR)
 {
+    data.front = ""
+    data.back = ""
     current_stack.unshift(data);
     populate();
     show_editor();
