@@ -25,11 +25,14 @@ import re
 # entities. This is much less tedious and error-prone than doing it ourselves.
 
 
-# Validate an ISO timestamp
-# source: https://stackoverflow.com/questions/41129921/validate-an-iso-8601-datetime-string-in-python
 iso8601_regex = r'^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$'
 match_iso8601 = re.compile(iso8601_regex).match
 def validate_iso8601(str_val):
+    """
+    Validate an ISO timestamp
+    source: https://stackoverflow.com/questions/41129921/validate-an-iso-8601-datetime-string-in-python
+    """
+
     try:            
         if match_iso8601( str_val ) is not None:
             return True
@@ -37,21 +40,30 @@ def validate_iso8601(str_val):
         pass
     return False
 
-# This is used for the user signup
 class SignUpView(CreateView):
+    """
+    Generate user signup form
+    """
+
     form_class = UserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
 
 
-# This is used for listing user profiles
 def user_catalog(request):
+    """
+    Generate user profile listing pages
+    """
+
     users = User.objects.all()
     return render(request, 'user_list.html', {'users': users})
 
 
-# This is used for showing the user profiles themselves
 def user_page(request, username):
+    """
+    Generate public user profile view
+    """
+
     user = get_object_or_404(User, username=username)
     
     # This grabs a list of the decks that belong to the user that we are allowed to view
@@ -60,8 +72,10 @@ def user_page(request, username):
     return render(request, 'user_profile.html', {'user': user, 'decks': decks})
 
 
-# This is used for showing the decks
 def deck_page(request, deck_id):
+    """
+    Generate a page showing what is in a deck (if viewable).
+    """
 
     # Retrieve the deck (if we are allowed to view it)
     deck = DeckViewSet(request=request).get_queryset().filter(id=deck_id).first()
@@ -81,12 +95,14 @@ def deck_page(request, deck_id):
 
 # see for more details on generics: https://www.django-rest-framework.org/api-guide/generic-views/
 
-# This implements the CRUD REST API for Flashcards.
-# Object-level validation takes place in the permission class.
-# Note that since we want field-level permissions checking, we need to do additional checks
-# (which currently take place on the serializer).
 
 class FlashcardViewSet(viewsets.ModelViewSet):
+    """
+    This implements the CRUD REST API for Flashcards.
+    Object-level validation takes place in the permission class.
+    Note that since we want field-level permissions checking, we need to do additional checks
+    (which currently take place on the serializer).
+    """
 
     permission_classes = [CanAccessFlashcard]
 
@@ -114,6 +130,10 @@ class FlashcardViewSet(viewsets.ModelViewSet):
             return Flashcard.objects.all().filter(deck__is_public=True)
 
     def list(self, request):
+        """
+        This implements the API call requesting a listing of flashcards.
+        """
+
         # rv is Return Value
         rv = self.get_queryset();
 
@@ -133,8 +153,11 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-    # Get the user's default deck. If they don't have any decks, create one.
     def get_default_deck(self):
+        """
+        Get the user's default deck. If they don't have any decks, create one.
+        """
+
         user = self.request.user
         # staff aren't really supposed to be creating decks
         if(not user.is_authenticated or user.is_staff):
@@ -160,16 +183,23 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         
 
 
-# This implements the CRUD REST API for Decks
-# Object-level validation takes place in the permission class
-# Note that since we want field-level permissions checking on write,
-# we need to do additional checks (which currently take place in the serializer)
 
 class DeckViewSet(viewsets.ModelViewSet):
+    """
+    This implements the CRUD REST API for Decks
+    Object-level validation takes place in the permission class
+    Note that since we want field-level permissions checking on write,
+    we need to do additional checks (which currently take place in the serializer)
+    """
 
     permission_classes = [CanAccessDeck]
 
     def get_serializer_class(self):
+        """
+        Retrieve the appropriate serializer by user role
+        Consider expanding permissions system and using capabilities
+        """
+
         if self.request.user.is_superuser:
             return AdminDeckSerializer
         if self.request.user.is_staff:
@@ -183,11 +213,14 @@ class DeckViewSet(viewsets.ModelViewSet):
         This view should return a list of all the decks
         owned by the currently authenticated user or public.
         """
+
         user = self.request.user
         if(user.is_authenticated):
             if(user.is_staff or user.is_superuser):
                 return Deck.objects.all()
             # Return all public decks and all user decks
             return Deck.objects.all().filter(Q(is_public=True) | Q(user=user))
+
+        # If the user is not authenticated, they can view only public decks
         return Deck.objects.all().filter(is_public=True)
 

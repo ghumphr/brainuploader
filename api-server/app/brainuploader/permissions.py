@@ -25,6 +25,7 @@ class CanAccessFlashcard(permissions.BasePermission):
     staff, read-only access to anyone if flashcard's deck is public, no access to non-owner/non-staff/non-superuser
     if flashcard's deck is not public.
     """
+
     def has_object_permission(self, request, view, flashcard):
         if request.user.is_superuser:
             return True

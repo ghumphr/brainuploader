@@ -5,9 +5,11 @@ from django.core.exceptions import PermissionDenied
 from django.utils.html import escape
 
 
-# Base class for all Flashcard serializers
-# Note: This serializer is responsible for removing *all* HTML from *all* fields on Flashcards
 class FlashcardSerializer(serializers.ModelSerializer):
+    """
+    Base class for all Flashcard serializers
+    Note: This serializer is responsible for removing *all* HTML from *all* fields on Flashcards
+    """
 
     # No HTML is allowed in the internal representation of any field
     # While it would be more elegant to store the data as-is and remove html
@@ -20,9 +22,11 @@ class FlashcardSerializer(serializers.ModelSerializer):
         return(data)
 
 
-# Base class for all Deck serializers
-# Note: This serializer is responsible for removing *all* HTML from *all* fields on Decks
 class DeckSerializer(serializers.ModelSerializer):
+    """
+    Base class for all Deck serializers
+    Note: This serializer is responsible for removing *all* HTML from *all* fields on Decks
+    """
 
     # No HTML is allowed in the internal representation of any field
     # While it would be more elegant to store the data as-is and remove html
@@ -34,10 +38,13 @@ class DeckSerializer(serializers.ModelSerializer):
             data[k] = escape(data[k])
         return(data)
 
-# This serializer is used for serializing flashcards for authenticated users
-# It ensures that the deck belongs to the current user
-# This is more complex than I would like, but we need field-level permission validation.
 class UserFlashcardSerializer(FlashcardSerializer):
+    """
+    This serializer is used for serializing flashcards for authenticated users
+    It ensures that the deck belongs to the current user
+    This is more complex than I would like, but we need field-level permission validation.
+    """
+
     class Meta:
         model = Flashcard
         fields = ['next_review', 'times_right_in_a_row', 'front', 'back', 'deck', 'id',]
@@ -66,6 +73,8 @@ class UserFlashcardSerializer(FlashcardSerializer):
         # If the deck is being updated, make sure the update is legal
         if("deck" in data):
 
+# The code below is commented out because it *should* not be necessary
+#
 #            # First, make sure that the current deck (if any) belongs to the current user.
 #            # This should never be triggered due to the permissions model.
 #            instance = self.instance  # Access the instance if it exists (for updates)
@@ -82,6 +91,8 @@ class UserFlashcardSerializer(FlashcardSerializer):
             if(deck is None or deck.user != request.user):
                 raise PermissionDenied("Illegal deck parameter.")
 
+# The code below is commented out because it *should* not be necessary
+#
 #        # If the deck is not being updated, the card must already be in a deck owned by the user.
 #        # This should never be triggered due to the permissions model.
 #        else:
@@ -96,49 +107,70 @@ class UserFlashcardSerializer(FlashcardSerializer):
         return data
 
 
-# This serializer is used to allow unauthenticated users to see public flashcards
 class PublicFlashcardSerializer(FlashcardSerializer):
+    """
+    This serializer is used to allow unauthenticated users to see public flashcards
+    """
+
     class Meta:
         model = Flashcard
         fields = ['front', 'back', 'deck', 'id',]
         read_only_fields = ['front', 'back', 'deck', 'id',]
 
-# This serializer allows staff members to see flashcards
 class StaffFlashcardSerializer(FlashcardSerializer):
+    """
+    This serializer allows staff members to see flashcards
+    """
+
     class Meta:
         model = Flashcard
         fields = ['front', 'back', 'deck', 'id',]
         read_only_fields = ['front', 'back', 'deck', 'id',]
 
-# This serializer gives admins unrestricted access to flashcards
 class AdminFlashcardSerializer(FlashcardSerializer):
+    """
+    This serializer gives admins unrestricted access to flashcards
+    """
+
     class Meta:
         model = Flashcard
         fields = '__all__'
 
-# This serializer allows authorized users to modify their own decks
 class UserDeckSerializer(DeckSerializer):
+    """
+    This serializer allows authorized users to modify their own decks
+    """
+
     class Meta:
         model = Deck
         fields = ['user', 'name', 'description', 'id',]
         read_only_fields = ['id',]
 
-# This serializer grants anonymous users read-only access to decks
 class PublicDeckSerializer(DeckSerializer):
+    """
+    This serializer grants anonymous users read-only access to public decks
+    """
+
     class Meta:
         model = Deck
         fields = ['id', 'user', 'name', 'description',]
         read_only_fields = ['id', 'user', 'name', 'description',]
 
-# This serializer grants staff members read-only access to decks
 class StaffDeckSerializer(DeckSerializer):
+    """
+    This serializer grants staff members read-only access to decks
+    """
+
     class Meta:
         model = Deck
         fields = ['id', 'user', 'name', 'description',]
         read_only_fields = ['id', 'user', 'name', 'description',]
 
-# This serializer grants the admin unrestricted access to decks
 class AdminDeckSerializer(DeckSerializer):
+    """
+    This serializer grants the admin unrestricted access to decks
+    """
+
     class Meta:
         model = Deck
         fields = '__all__'
